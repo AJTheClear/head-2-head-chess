@@ -1,0 +1,48 @@
+/* Base light theme (default) */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --navbar-bg: #ffffff;
+    --navbar-shadow: rgba(0, 0, 0, 0.1);
+    --highlight-color: #f0b90b;
+}
+
+/* Dark theme overrides - activated when .dark-theme is applied to html */
+html.dark-theme {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --navbar-bg: #2b2b2b;
+    --navbar-shadow: rgba(0, 0, 0, 0.3);
+}
+
+/* Apply variables to elements */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar {
+    background-color: var(--navbar-bg);
+    box-shadow: 0 2px 10px var(--navbar-shadow);
+}
+
+.logo a,
+.nav-links li a,
+.user-info h3,
+.sub-menu-link {
+    color: var(--text-color);
+}
+
+/* Sub menu should match theme */
+.sub-menu-wrap {
+    background-color: var(--bg-color);
+    box-shadow: 0 8px 20px var(--navbar-shadow);
+}
+
+/* Fix for the chessboard positioning */
+#chessboard-section {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}

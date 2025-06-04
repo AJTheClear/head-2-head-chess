@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - H2H Chess</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../../styles/global.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Navbar container -->
+    <div id="navbar-container"></div>
+
+    <!-- Profile Container -->
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-avatar-container">
+                <img id="profile-avatar" src="../../assets/images/SungJinWoo_ProfilePic.png" alt="Profile Picture">
+                <div class="edit-avatar-overlay" id="edit-avatar-btn">
+                    <img src="../../assets/images/change-avatar-icon.png" alt="Change Avatar">
+                </div>
+            </div>
+            <div class="profile-header-info">
+                <h1 id="username">Nick Georgiev</h1>
+                <div class="profile-meta">
+                    <div class="elo-rating">
+                        <span class="label">ELO:</span>
+                        <span class="value" id="elo-value">1850</span>
+                    </div>
+                    <div class="country">
+                        <span class="label">Country:</span>
+                        <span class="value" id="country-value">Bulgaria</span>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-actions">
+                <button id="edit-profile-btn" class="btn-primary">Edit Profile</button>
+            </div>
+        </div>
+
+        <div class="profile-body">
+            <div class="profile-section">
+                <h2>Short Bio</h2>
+                <p id="user-bio">
+                    Chess enthusiast from Sofia, Bulgaria. Looking forward to playing with y'all. 😎
+                </p>
+            </div>
+
+            <div class="profile-section">
+                <h2>Recent Matches</h2>
+                <div class="match-history">
+                    <div class="match-item">
+                        <div class="match-result win">Win</div>
+                        <div class="match-opponent">vs. AlexPawnMaster90</div>
+                        <div class="match-date">April 25, 2025</div>
+                    </div>
+                    <div class="match-item">
+                        <div class="match-result loss">Loss</div>
+                        <div class="match-opponent">vs. ChessTerminator999</div>
+                        <div class="match-date">April 23, 2025</div>
+                    </div>
+                    <div class="match-item">
+                        <div class="match-result win">Win</div>
+                        <div class="match-opponent">vs. QueenMaster42</div>
+                        <div class="match-date">April 20, 2025</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal" id="edit-profile-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Edit Profile</h2>
+            <form id="edit-profile-form">
+                <div class="form-group">
+                    <label for="edit-username">Username</label>
+                    <input type="text" id="edit-username" name="username" value="Nick Georgiev">
+                </div>
+                <div class="form-group">
+                    <label for="edit-bio">Short Bio</label>
+                    <textarea id="edit-bio" name="bio" rows="3"
+                        maxlength="100">Chess enthusiast from Sofia, Bulgaria. Looking forward to playing with y'all.😎</textarea>
+                    <!-- Character counter will be inserted here by JavaScript -->
+                </div>
+                <div class="form-group">
+                    <label for="edit-country">Country</label>
+                    <select id="edit-country" name="country">
+                        <!-- Will be populated from iso-countries.json -->
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                    <button type="button" class="btn-secondary" id="cancel-edit">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Avatar Upload Modal -->
+    <div class="modal" id="avatar-upload-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Change Profile Picture</h2>
+            <div class="avatar-upload-container">
+                <div class="avatar-preview">
+                    <img id="avatar-preview-img" src="../../assets/images/SungJinWoo_ProfilePic.png"
+                        alt="Avatar Preview">
+                </div>
+                <div class="avatar-upload-controls">
+                    <label for="avatar-upload" class="btn-primary">Select Image</label>
+                    <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
+                    <p class="upload-info">Allowed: JPG, PNG. Max size: 2MB</p>
+                </div>
+                <div class="avatar-upload-actions">
+                    <button id="save-avatar" class="btn-primary" disabled>Save</button>
+                    <button id="cancel-avatar" class="btn-secondary">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Scripts -->
+    <script src="../../scripts/load-navbar.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

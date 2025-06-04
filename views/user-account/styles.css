@@ -1,0 +1,708 @@
+/* Account Settings Specific Styles */
+.account-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.account-subtitle {
+    color: #666;
+    margin-bottom: 30px;
+}
+
+.account-content {
+    display: flex;
+    gap: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    overflow: hidden;
+}
+
+/* Sidebar Styles */
+.account-sidebar {
+    min-width: 250px;
+    background-color: var(--color-primary);
+    padding: 20px 0;
+}
+
+.account-nav {
+    display: flex;
+    flex-direction: column;
+}
+
+.account-nav-item {
+    padding: 14px 24px;
+    color: #333;
+    text-decoration: none;
+    position: relative;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    border-left: 3px solid transparent;
+}
+
+.account-nav-item:hover {
+    /* transform: translateX(5px); */
+    background-color: rgba(59, 130, 246, 0.12);
+}
+
+.account-nav-item.active {
+    background-color: rgba(59, 130, 246, 0.12);
+    color: #3b82f6;
+    border-left: 3px solid #3b82f6;
+    font-weight: 500;
+}
+
+.account-nav-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #3b82f6;
+    transition: width 0.3s ease;
+}
+
+.account-nav-item:hover::after {
+    width: 100%;
+}
+
+.account-nav-item.active::after {
+    width: 100%;
+}
+
+/* Section Styles */
+.account-sections {
+    flex: 1;
+    padding: 30px;
+}
+
+.account-section {
+    display: none;
+}
+
+.account-section.active {
+    display: block;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e5e7eb;
+    position: relative;
+}
+
+.section-header h2 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.section-header h2:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: #3b82f6;
+    border-radius: 2px;
+}
+
+.edit-button {
+    background-color: transparent;
+    color: #3b82f6;
+    border: 1px solid #3b82f6;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.edit-button:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.section-description {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Information Display Styles */
+.info-row {
+    display: flex;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.info-label {
+    width: 200px;
+    font-weight: 500;
+    color: #555;
+}
+
+.info-value {
+    flex: 1;
+}
+
+/* Password Display */
+.password-info {
+    margin-top: 20px;
+}
+
+.password-dots {
+    font-size: 24px;
+    letter-spacing: 2px;
+    color: #555;
+}
+
+/* Form Styles */
+.edit-mode {
+    background-color: #f9fafb;
+    padding: 20px;
+    border-radius: 6px;
+    border: 1px solid #e5e7eb;
+}
+
+.hidden {
+    display: none;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.optional {
+    font-weight: normal;
+    color: #888;
+    font-size: 14px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.btn-primary {
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #2563eb;
+}
+
+.btn-primary:disabled {
+    background-color: #9cb3f0;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background-color: white;
+    color: #333;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 10px 18px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #f3f4f6;
+}
+
+/* Password Strength Meter */
+.password-strength-meter {
+    height: 4px;
+    background-color: #e5e7eb;
+    margin-top: 8px;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.strength-bar {
+    height: 100%;
+    width: 0;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strength-bar.weak {
+    width: 25%;
+    background-color: #ef4444;
+}
+
+.strength-bar.medium {
+    width: 50%;
+    background-color: #f59e0b;
+}
+
+.strength-bar.strong {
+    width: 75%;
+    background-color: #10b981;
+}
+
+.strength-bar.very-strong {
+    width: 100%;
+    background-color: #22c55e;
+}
+
+.password-requirements {
+    margin-top: 12px;
+    padding: 12px;
+    background-color: #f3f4f6;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.password-requirements p {
+    margin: 0 0 8px 0;
+    font-weight: 500;
+}
+
+.password-requirements ul {
+    padding-left: 20px;
+    margin: 0;
+}
+
+.password-requirements li {
+    margin-bottom: 4px;
+    color: #6b7280;
+}
+
+.password-requirements li.valid {
+    color: #22c55e;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+}
+
+.small-modal {
+    max-width: 400px;
+}
+
+.close-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 24px;
+    color: #6b7280;
+    cursor: pointer;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.modal-actions.center {
+    justify-content: center;
+}
+
+.success-icon {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.success-icon img {
+    width: 64px;
+    height: 64px;
+}
+
+/* New sections styles */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.toggle-slider {
+    background-color: #3b82f6;
+}
+
+input:checked+.toggle-slider:before {
+    transform: translateX(26px);
+}
+
+.preferences-group {
+    margin-bottom: 24px;
+}
+
+.preferences-group h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.preference-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.preference-item:last-child {
+    border-bottom: none;
+}
+
+.preference-label {
+    font-weight: 400;
+}
+
+.preference-description {
+    font-size: 14px;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+.theme-options {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.theme-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80px;
+    cursor: pointer;
+}
+
+.theme-preview {
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    border: 2px solid transparent;
+    overflow: hidden;
+}
+
+.theme-preview.light {
+    background-color: #f8fafc;
+}
+
+.theme-preview.dark {
+    background-color: #1e293b;
+}
+
+.theme-preview.blue {
+    background-color: #eff6ff;
+}
+
+.theme-preview.selected {
+    border-color: #3b82f6;
+}
+
+.theme-name {
+    font-size: 14px;
+    color: #374151;
+}
+
+.notification-settings .info-row {
+    display: flex;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .account-content {
+        flex-direction: column;
+    }
+
+    .account-sidebar {
+        min-width: 100%;
+        padding: 0;
+    }
+
+    .account-nav {
+        flex-direction: row;
+        overflow-x: auto;
+    }
+
+    .account-nav-item {
+        padding: 12px 16px;
+        white-space: nowrap;
+        border-left: none;
+        border-bottom: 3px solid transparent;
+    }
+
+    .account-nav-item.active {
+        border-left: none;
+        border-bottom: 3px solid #3b82f6;
+    }
+
+    .account-sections {
+        padding: 20px;
+    }
+
+    .info-row {
+        flex-direction: column;
+    }
+
+    .info-label {
+        width: 100%;
+        margin-bottom: 4px;
+    }
+
+    .modal-content {
+        width: 90%;
+        padding: 20px;
+    }
+}
+
+/* ─── H2H Theme Hints ───────────────────────────────────────────────── */
+
+/* 1) Give the white box a yellow accent stripe */
+.login-box {
+    position: relative;
+    overflow: hidden;
+}
+
+.login-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background-color: #f0b90b;
+    /* same yellow as navbar */
+}
+
+/* 2) Pull your header into the nav-blue family */
+.login-header h1 {
+    color: #fff;
+    /* white on dark */
+    background-color: #2b3645;
+    /* navbar navy */
+    padding: 12px 0;
+    border-radius: 4px 4px 0 0;
+}
+
+/* 3) Make the “Sign In” button text match your dark nav */
+.btn-primary {
+    background-color: #f0b90b;
+    /* leave yellow bg */
+    color: #2b3645 !important;
+    /* dark text */
+}
+
+.btn-primary:hover {
+    background-color: #d9a400;
+}
+
+/* 4) Footer link accents */
+.login-footer a {
+    color: #f0b90b;
+}
+
+/* ─── H2H Theme Overrides for Account Settings ─────────────────────────── */
+
+/* 1) Акцентът (yellow) вместо синьото */
+.account-nav-item.active,
+.account-nav-item:hover {
+    color: var(--highlight-color);
+    border-left-color: var(--highlight-color);
+}
+
+/* 2) Подчертаване на секциите в accent */
+.section-header h2:after {
+    background-color: var(--highlight-color);
+}
+
+/* 3) Бутони в синхрон с navbar: primary = yellow text тъмно-син, secondary – лек 3D-hover */
+.btn-primary {
+    background-color: var(--highlight-color);
+    color: var(--navbar-bg) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #d9a400;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-secondary {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: var(--secondary-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* 4) Леко увеличаване на основните заглавия и текстове, динамично */
+.section-header h2 {
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
+}
+
+.info-value,
+.info-label {
+    font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+}
+
+/* 5) Добавяме subtle yellow box-shadow на container-a */
+.account-content {
+    box-shadow: 0 2px 12px rgba(240, 185, 11, 0.15);
+}
+
+/* 6) При hover на sidebar items леко индикационно движение
+.account-nav-item {
+    transition: padding-left 0.2s ease, background-color 0.2s ease;
+}
+
+.account-nav-item:hover {
+    color: #fff !important;
+    padding-left: 28px;
+} */
+
+/* ───────────────────────────────────────────────────────────────────────── */
+
+/* текст и hover в табовете */
+.account-nav-item {
+    color: #e0e0e0;
+    /* по-светъл от чисто бяло */
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.account-nav-item:hover {
+    background-color: rgba(240, 185, 11, 0.1);
+    /* лек жълт акцент при hover */
+    color: #f0b90b;
+    /* navbar yellow */
+}
+
+.account-nav-item.active {
+    background-color: rgba(240, 185, 11, 0.2);
+    /* по-наситен жълт фон */
+    color: #fff !important;
+    border-left-color: #f0b90b;
+    /* accent stripe */
+}
+
+/* ─── Confirmation modal buttons ───────────────────────────────────────── */
+
+/* “Yes, save changes” (confirm) – hover в зелено */
+#confirm-button.btn-primary:hover {
+    background-color: #10b981 !important;
+    /* green */
+    border-color: #10b981 !important;
+    color: #fff !important;
+}
+
+/* “Cancel” – hover в червено */
+#cancel-button.btn-secondary:hover {
+    background-color: #ef4444 !important;
+    /* red */
+    border-color: #ef4444 !important;
+    color: #fff !important;
+}
+
+/* ─── Success modal title ──────────────────────────────────────────────── */
+
+/* правим заглавието “Success” (или “Changes Saved”) зелено и bold */
+#success-modal .modal-content>h2:first-of-type {
+    color: #10b981;
+    /* green */
+    font-weight: 700;
+}
+
+/* override за активния таб да е с бял текст */
+.account-nav-item.active {
+    color: #fff !important;
+    /* останалите свойства остават както са */
+}

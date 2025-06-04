@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - H2H Chess</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../../styles/global.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="register-container">
+        <div class="register-box">
+            <div class="register-header">
+                <h1>H2H Chess</h1>
+                <p>Create your account</p>
+            </div>
+
+            <form id="register-form" class="register-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input class="form-input" id="firstName" type="text" placeholder="Enter your first name"
+                            required />
+                        <span id="firstName-error" class="error-message"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input class="form-input" id="lastName" type="text" placeholder="Enter your last name"
+                            required />
+                        <span id="lastName-error" class="error-message"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input class="form-input" id="email" type="email" placeholder="Enter your email address" required />
+                    <span id="email-error" class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input class="form-input" id="username" type="text" placeholder="Choose a username" required />
+                    <span id="username-error" class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <select class="form-input" id="country" required>
+                        <option value="" disabled selected>Select your country</option>
+                        <!-- Will be populated with countries from JavaScript -->
+                    </select>
+                    <span id="country-error" class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input class="form-input" id="password" type="password" placeholder="Create a password" required />
+                    <span id="password-error" class="error-message"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input class="form-input" id="confirmPassword" type="password" placeholder="Confirm your password"
+                        required />
+                    <span id="confirmPassword-error" class="error-message"></span>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" id="register-btn" class="btn-primary">Create Account</button>
+                </div>
+            </form>
+
+            <div class="register-footer">
+                <p>Already have an account? <a href="../login-page/index.html">Sign in</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../../utils/auth.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

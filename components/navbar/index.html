@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navbar</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../../styles/global.css">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+
+        <!-- Logo -->
+        <div class="logo">
+            <a href="/">H2H Chess</a>
+        </div>
+
+        <!-- Right Side: Search and Profile -->
+        <div class="nav-right">
+            <img src="../../assets/images/loupe.png" class="search-icon" onclick="toggleSearch()">
+            <img src="../../assets/images/SungJinWoo_ProfilePic.png" class="user-pic" onclick="toggleMenu()">
+
+            <!-- Profile Dropdown -->
+            <div class="sub-menu-wrap" id="subMenu">
+                <div class="sub-menu">
+                    <div class="user-info">
+                        <img src="../../assets/images/SungJinWoo_ProfilePic.png">
+                        <h3>Nick Georgiev</h3>
+                    </div>
+                    <hr>
+                    <a href="../../views/user-public-profile/index.html" class="sub-menu-link">
+                        <img src="../../assets/images/profile.png">
+                        <p>Profile</p>
+                        <span>></span>
+                    </a>
+                    <a href="../../views/user-account/index.html" class="sub-menu-link">
+                        <img src="../../assets/images/settings.png">
+                        <p>Settings</p>
+                        <span>></span>
+                    </a>
+                    <a href="../../views/help-page/index.html" class="sub-menu-link">
+                        <img src="../../assets/images/help-web-button.png">
+                        <p>Help & Support</p>
+                        <span>></span>
+                    </a>
+
+                    <!-- Theme Toggle
+                    <div class="sub-menu-toggle">
+                        <img src="../../assets/images/night-mode.png">
+                        <p>Change Theme</p>
+                        <label class="toggle-switch">
+                            <input type="checkbox" class="theme-toggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div> -->
+
+                    <a href="#" class="sub-menu-link logout-link logout" onclick="logout(); return false;">
+                        <img src="../../assets/images/logout.png">
+                        <p>Logout</p>
+                        <span>></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Overlay -->
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-container">
+            <div class="search-box">
+                <img src="../../assets/images/loupe.png" class="search-box-icon">
+                <input type="text" id="searchInput" placeholder="Search h2hchess.com" autocomplete="off">
+            </div>
+            <div class="search-results" id="searchResults">
+                <div class="search-results-empty">
+                    Type to search for players, games, or tournaments
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay for dimming -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- Add utility scripts before main script -->
+    <script src="../../utils/auth.js"></script>
+    <script src="../../utils/search.js"></script>
+    <script src="../../utils/theme.js"></script>
+    <script src="script.js"></script>
+
+</body>
+
+</html>

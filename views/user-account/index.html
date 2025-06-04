@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings - H2H Chess</title>
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../../styles/global.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- Navbar will be loaded dynamically -->
+    <div id="navbar-container"></div>
+
+    <div class="account-container">
+        <h1>Account Settings</h1>
+        <p class="account-subtitle">Manage your personal information and account preferences</p>
+
+        <div class="account-content">
+            <div class="account-sidebar">
+                <div class="account-nav">
+                    <a href="#" class="account-nav-item active" data-section="personal-info">Personal Information</a>
+                    <a href="#" class="account-nav-item" data-section="password">Password</a>
+                    <a href="#" class="account-nav-item" data-section="contact-info">Contact Information</a>
+                </div>
+            </div>
+
+            <div class="account-sections">
+                <!-- Personal Information Section -->
+                <div class="account-section active" id="personal-info-section">
+                    <div class="section-header">
+                        <h2>Personal Information</h2>
+                        <button class="edit-button" id="edit-personal-info">Edit</button>
+                    </div>
+
+                    <!-- View Mode -->
+                    <div class="view-mode" id="personal-info-view">
+                        <div class="info-row">
+                            <div class="info-label">First Name</div>
+                            <div class="info-value" id="first-name-display">Nick</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Middle Name</div>
+                            <div class="info-value" id="middle-name-display">Svetoslavov</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Last Name</div>
+                            <div class="info-value" id="last-name-display">Georgiev</div>
+                        </div>
+                    </div>
+
+                    <!-- Edit Mode -->
+                    <div class="edit-mode hidden" id="personal-info-edit">
+                        <form id="personal-info-form">
+                            <div class="form-group">
+                                <label for="first-name">First Name</label>
+                                <input type="text" id="first-name" name="firstName" value="Nick" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="middle-name">Middle Name <span class="optional">(optional)</span></label>
+                                <input type="text" id="middle-name" name="middleName" value="Svetoslavov">
+                            </div>
+                            <div class="form-group">
+                                <label for="last-name">Last Name</label>
+                                <input type="text" id="last-name" name="lastName" value="Georgiev" required>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">Save Changes</button>
+                                <button type="button" class="btn-secondary" id="cancel-personal-info">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Password Section -->
+                <div class="account-section" id="password-section">
+                    <div class="section-header">
+                        <h2>Password</h2>
+                        <button class="edit-button" id="edit-password">Change Password</button>
+                    </div>
+
+                    <!-- View Mode -->
+                    <div class="view-mode" id="password-view">
+                        <p class="section-description">
+                            Your password was last changed on <span id="last-password-change">April 28, 2025</span>.
+                        </p>
+                        <div class="password-info">
+                            <div class="password-dots">••••••••</div>
+                        </div>
+                    </div>
+
+                    <!-- Edit Mode -->
+                    <div class="edit-mode hidden" id="password-edit">
+                        <form id="password-form">
+                            <div class="form-group">
+                                <label for="current-password">Current Password</label>
+                                <input type="password" id="current-password" name="currentPassword" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-password">New Password</label>
+                                <input type="password" id="new-password" name="newPassword" required>
+                                <div class="password-strength-meter">
+                                    <div class="strength-bar" id="password-strength-bar"></div>
+                                </div>
+                                <div class="password-requirements">
+                                    <p>Password must contain:</p>
+                                    <ul>
+                                        <li id="req-length">At least 8 characters</li>
+                                        <li id="req-uppercase">At least one uppercase letter</li>
+                                        <li id="req-lowercase">At least one lowercase letter</li>
+                                        <li id="req-number">At least one number</li>
+                                        <li id="req-special">At least one special character</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm-password">Confirm New Password</label>
+                                <input type="password" id="confirm-password" name="confirmPassword" required>
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary" id="save-password-btn" disabled>Save
+                                    Changes</button>
+                                <button type="button" class="btn-secondary" id="cancel-password">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Contact Information Section -->
+                <div class="account-section" id="contact-info-section">
+                    <div class="section-header">
+                        <h2>Contact Information</h2>
+                        <button class="edit-button" id="edit-contact-info">Edit</button>
+                    </div>
+
+                    <!-- View Mode -->
+                    <div class="view-mode" id="contact-info-view">
+                        <div class="info-row">
+                            <div class="info-label">Email Address</div>
+                            <div class="info-value" id="email-display">nick.georgiev@example.com</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">Phone Number</div>
+                            <div class="info-value" id="phone-display">+359 88 123 4567</div>
+                        </div>
+                    </div>
+
+                    <!-- Edit Mode -->
+                    <div class="edit-mode hidden" id="contact-info-edit">
+                        <form id="contact-info-form">
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" value="nick.georgiev@example.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" value="+359 88 123 4567">
+                            </div>
+                            <div class="form-actions">
+                                <button type="submit" class="btn-primary">Save Changes</button>
+                                <button type="button" class="btn-secondary" id="cancel-contact-info">Cancel</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmation-modal">
+        <div class="modal-content small-modal">
+            <span class="close-modal">&times;</span>
+            <h2 id="modal-title">Confirm Changes</h2>
+            <p id="modal-message">Are you sure you want to save these changes?</p>
+            <div class="modal-actions">
+                <button id="confirm-button" class="btn-primary">Yes, Save Changes</button>
+                <button id="cancel-button" class="btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="success-modal">
+        <div class="modal-content small-modal">
+            <span class="close-modal">&times;</span>
+            <div class="success-icon">
+                <img src="../../assets/images/check-circle.png" alt="Success">
+            </div>
+            <h2>Changes Saved</h2>
+            <p id="success-message">Your changes have been saved successfully.</p>
+            <div class="modal-actions center">
+                <button id="ok-button" class="btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Navbar Script -->
+    <script src="../../scripts/load-navbar.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -3,46 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title>Game Lobby</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 40px;
-    }
-
-    .button-row {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-
-    button {
-      padding: 12px 24px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .input-group {
-      margin: 15px 0;
-    }
-
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-
-    input[type="text"] {
-      padding: 10px;
-      width: 300px;
-      font-size: 14px;
-    }
-  </style>
 </head>
 <body>
 
-  <h1>Game Lobby</h1>
+  <div id="navbar-container"></div>
+
+  <div class="page-content" style="padding: 100px; text-align: center;">
+    <h1>Welcome to H2H Chess</h1>
+    <p>Experience real-time head-to-head chess battles!</p>
+  </div>
 
   <div class="button-row">
     <button id="createGameBtn">Create New Game</button>
@@ -59,5 +28,6 @@
   </div>
 
   <script src="page.js"></script>
+  <script src="../../scripts/load-navbar.js"></script>
 </body>
 </html>

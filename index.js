@@ -18,6 +18,20 @@ app.use(express.static("gamePage"));
 app.use('/img', express.static('img'));
 app.use('/audio', express.static('audio'));
 
+app.use('/assets', express.static('assets'));
+app.use('/styles', express.static('styles'));
+app.use('/utils', express.static('utils'));
+app.use('/scripts', express.static('scripts'));
+app.use('/views/user-account', express.static('views/user-account'));
+app.use('/views/user-public-profile', express.static('views/user-public-profile'));
+app.use('/views/register-page', express.static('views/register-page'));
+app.use('/views/login-page', express.static('views/login-page'));
+app.use('/views/play-page', express.static('views/play-page'));
+app.use('/views/home-page', express.static('views/home-page'));
+app.use('/views/help-page', express.static('views/help-page'));
+app.use('/views/about-page', express.static('views/about-page'));
+app.use('/components/navbar', express.static('components/navbar'));
+
 app.use('/', router)
 
 io.on('connection', (socket) => {

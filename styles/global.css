@@ -1,0 +1,168 @@
+/* Global styles with theme support */
+:root {
+    /* Default Light Theme Variables */
+    --primary-bg: #fff;
+    --secondary-bg: #f5f8fc;
+    --navbar-bg: #ffffff;
+    --text-color: #333;
+    --text-muted: #666;
+    --link-color: #1a73e8;
+    --border-color: #e5e7eb;
+    --overlay-bg: rgba(255, 255, 255, 0.8);
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --highlight-color: #f0b90b;
+
+    /* Extended module vars */
+    --color-bg: #f8f5f0;
+    --color-text: #333;
+    --color-primary: #2b3645;
+    --color-accent: #f0b90b;
+    --color-light: #f5f5f5;
+    --color-light2: #f9f9f9;
+    --color-border-light: #ddd;
+    --shadow-light: rgba(0, 0, 0, 0.1);
+
+    --color-bg-dark: #2b3645;
+    /* навбар тъмно-синьо */
+    --color-accent: #f0b90b;
+    /* жълто акцентче */
+    --color-bg-light: #fafafa;
+    /* светъл фон на секции */
+    --color-text-primary: #333;
+    /* основен текст */
+    --color-text-muted: #666;
+    /* второстепенен текст */
+}
+
+
+/* Reset & base */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Links */
+a {
+    color: var(--link-color);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+/* Containers */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Primary */
+.btn-primary {
+    background-color: var(--color-primary) !important;
+    color: #fff !important;
+    box-shadow: 0 2px 6px var(--shadow-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-accent) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px var(--shadow-color);
+}
+
+/* Secondary */
+.btn-secondary {
+    background-color: var(--color-light) !important;
+    color: var(--color-text) !important;
+    border: 1px solid var(--color-border-light);
+    box-shadow: none;
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-light2) !important;
+    box-shadow: 0 2px 8px var(--shadow-color);
+}
+
+/* Forms */
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--highlight-color);
+    box-shadow: 0 0 0 2px var(--overlay-bg);
+}
+
+/* Cards */
+.card {
+    background-color: var(--primary-bg);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px var(--shadow-color);
+    overflow: hidden;
+}
+
+/* Modals */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Utilities */
+.hidden {
+    display: none !important;
+}
+
+.hidden-mobile {
+    display: none !important;
+}
+
+@media (min-width: 768px) {
+    .hidden-mobile {
+        display: block !important;
+    }
+}

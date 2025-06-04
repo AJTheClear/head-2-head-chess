@@ -15,9 +15,14 @@ const socket = io();
 
 // Get gameId from URL and store it globally
 window.gameId = window.location.pathname.split("/")[1];
+const gameIdDisplay = document.getElementById('gameIdDisplay');
+gameIdDisplay.textContent = window.gameId;
 const isSpectator = new URLSearchParams(window.location.search).get('spectate') === 'true';
 
 socket.emit('joinGame', { gameId: window.gameId, isSpectator });
+
+// Get audio element
+const moveSound = document.getElementById('moveSound');
 
 function getLegalMovesRaw(pos, state = window.currentGameState.board, skipKingCheck = false) {
   const piece = state[pos];
@@ -216,7 +221,11 @@ function handleSelect(pos) {
   if (selected && selected !== pos && isMoveLegal(selected, pos)) {
     const from = selected;
     const to = pos;
-    
+
+    if (moveSound) {
+        moveSound.play();
+    }
+
     socket.emit('makeMove', { 
       gameId: window.gameId,
       from,
