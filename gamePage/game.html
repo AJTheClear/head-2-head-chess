@@ -3,98 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>Game Room</title>
-  <style>
-    table {
-      border-collapse: collapse;
-      margin: 20px auto;
-    }
-
-    td {
-      width: 50px;
-      height: 50px;
-      border: 1px solid #333;
-      text-align: center;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-
-    .red-field {
-      background-color: #ffcccc;
-    }
-
-    .blue-field {
-      background-color: #cce6ff;
-    }
-
-    .white-field {
-      background-color: #ffffff;
-    }
-
-    .selected {
-      background-color: yellow !important;
-    }
-
-    textarea {
-      display: block;
-      margin: 20px auto;
-      width: 400px;
-      height: 100px;
-      resize: none;
-    }
-  </style>
+  <link rel="stylesheet" href="game.css">
 </head>
 <body>
   <h1 style="text-align:center;">Game Room</h1>
 
   <table id="gameBoard"></table>
-
   <textarea id="messageBox" placeholder="Messages..."></textarea>
-
-  <script>
-    const board = document.getElementById("gameBoard");
-    for (let i = 0; i < 8; i++) {
-      const row = board.insertRow();
-      for (let j = 0; j < 8; j++) {
-        const cell = row.insertCell();
-        cell.textContent = "";
-        cell.dataset.row = i;
-        cell.dataset.col = j;
-        
-        if (i < 2) {
-          cell.classList.add('red-field');
-        } else if (i >= 6) {
-          cell.classList.add('blue-field');
-        } else {
-          cell.classList.add('white-field');
-        }
-      }
-    }
-
-    function updateBoard(gameState) {
-      if (!gameState || !gameState.board) return;
-      
-      for (let i = 0; i < 8; i++) {
-        for (let j = 0; j < 8; j++) {
-          const cell = board.rows[i].cells[j];
-          const cellState = gameState.board[i][j];
-          
-          cell.classList.remove('red-field', 'blue-field', 'white-field');
-          
-          if (cellState === 'red') {
-            cell.classList.add('red-field');
-          } else if (cellState === 'blue') {
-            cell.classList.add('blue-field');
-          } else {
-            cell.classList.add('white-field');
-          }
-        }
-      }
-    }
-
-    socket.on('gameStateUpdate', (gameState) => {
-      updateBoard(gameState);
-    });
-  </script>
+  <audio id="moveSound" src="/audio/move.mp3" preload="auto"></audio>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="game.js"></script>

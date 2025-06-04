@@ -5,14 +5,21 @@ export class Game {
       this.moves = [];
       this.turn = "white";
       this.status = "waiting"; // waiting, playing, finished
+      this.winner = null;
+      this.endReason = null;
       
-      this.board = Array(8).fill(null).map((_, i) => {
-        return Array(8).fill(null).map((_, j) => {
-          if (i < 2) return 'red';
-          if (i >= 6) return 'blue';
-          return 'white';
-        });
-      });
+      // Initialize chess board with pieces
+      this.board = {
+        a1: 'wr', b1: 'wn', c1: 'wb', d1: 'wq', e1: 'wk', f1: 'wb', g1: 'wn', h1: 'wr',
+        a2: 'wp', b2: 'wp', c2: 'wp', d2: 'wp', e2: 'wp', f2: 'wp', g2: 'wp', h2: 'wp',
+        a7: 'bp', b7: 'bp', c7: 'bp', d7: 'bp', e7: 'bp', f7: 'bp', g7: 'bp', h7: 'bp',
+        a8: 'br', b8: 'bn', c8: 'bb', d8: 'bq', e8: 'bk', f8: 'bb', g8: 'bn', h8: 'br',
+      };
+
+      this.castlingRights = {
+        w: { kingMoved: false, rookAMoved: false, rookHMoved: false },
+        b: { kingMoved: false, rookAMoved: false, rookHMoved: false }
+      };
     }
   
     addPlayer(socket, forcedRole = null) {
@@ -21,10 +28,8 @@ export class Game {
         return "spectator";
       }
 
-      // counting how many players we have so far (without the one currently joining)
       const realPlayersCount = this.players.filter(p => p.role !== "spectator").length;
       
-      // needed in case someone wants to join as a player but there are already two players
       if (realPlayersCount >= 2) {
         this.players.push({ id: socket.id, socket, role: "spectator" });
         return "spectator";
@@ -70,12 +75,54 @@ export class Game {
       if (!this.isPlayersTurn(socketId)) return false;
   
       const role = this.getPlayerRole(socketId);
-      const moveText = `${role} player moved from (${move.from.row},${move.from.col}) to (${move.to.row},${move.to.col})`;
-      this.moves.push(moveText);
+      const { from, to } = move;
+      const movingPiece = this.board[from];
       
-      const fromCell = this.board[move.from.row][move.from.col];
-      this.board[move.from.row][move.from.col] = 'white';
-      this.board[move.to.row][move.to.col] = fromCell;
+      if (!movingPiece) return false;
+      
+      const pieceColor = movingPiece[0];
+      const pieceType = movingPiece[1];
+      
+      // Handle castling
+      if (pieceType === 'k') {
+        this.castlingRights[pieceColor].kingMoved = true;
+        if (from === 'e1' && to === 'g1') {
+          this.board['f1'] = this.board['h1'];
+          delete this.board['h1'];
+        }
+        if (from === 'e1' && to === 'c1') {
+          this.board['d1'] = this.board['a1'];
+          delete this.board['a1'];
+        }
+        if (from === 'e8' && to === 'g8') {
+          this.board['f8'] = this.board['h8'];
+          delete this.board['h8'];
+        }
+        if (from === 'e8' && to === 'c8') {
+          this.board['d8'] = this.board['a8'];
+          delete this.board['a8'];
+        }
+      }
+
+      // Handle rook moves for castling rights
+      if (pieceType === 'r') {
+        if (from === 'a1') this.castlingRights['w'].rookAMoved = true;
+        if (from === 'h1') this.castlingRights['w'].rookHMoved = true;
+        if (from === 'a8') this.castlingRights['b'].rookAMoved = true;
+        if (from === 'h8') this.castlingRights['b'].rookHMoved = true;
+      }
+
+      // Handle pawn promotion
+      if (pieceType === 'p' && (to[1] === '8' || to[1] === '1')) {
+        this.board[to] = pieceColor + 'q'; // Default to queen
+      } else {
+        this.board[to] = movingPiece;
+      }
+
+      delete this.board[from];
+      
+      const moveText = `${role} player moved from ${from} to ${to}`;
+      this.moves.push(moveText);
       
       this.turn = this.turn === "white" ? "black" : "white";
       return true;
@@ -88,7 +135,9 @@ export class Game {
         turn: this.turn,
         players: this.players.map(p => ({ id: p.id, role: p.role })),
         moves: this.moves,
-        board: this.board
+        board: this.board,
+        winner: this.winner,
+        endReason: this.endReason
       };
     }
 }

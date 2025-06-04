@@ -15,6 +15,8 @@ app.use(cors())
 app.use(express.json())
 app.use(express.static("homePage"));
 app.use(express.static("gamePage"));
+app.use('/img', express.static('img'));
+app.use('/audio', express.static('audio'));
 
 app.use('/', router)
 
@@ -34,8 +36,8 @@ io.on('connection', (socket) => {
       const gameState = game.getGameState();
       io.to(gameId).emit('gameStateUpdate', gameState);
       
-      if (game.status === "playing") {
-        io.to(gameId).emit('gameStarted', { 
+      if (game.status === "playing" && game.players.length === 2) {
+        io.to(gameId).emit('gameStarted', {
           whitePlayer: game.players.find(p => p.role === 'white')?.id,
           blackPlayer: game.players.find(p => p.role === 'black')?.id
         });
@@ -58,6 +60,19 @@ io.on('connection', (socket) => {
         const gameState = game.getGameState();
         io.to(gameId).emit('gameStateUpdate', gameState);
       }
+    });
+  
+    socket.on('gameEnded', ({ gameId, reason, winner }) => {
+      const game = games.get(gameId);
+      if (!game) return;
+
+      game.status = "finished";
+      game.winner = winner;
+      game.endReason = reason;
+
+      const gameState = game.getGameState();
+      io.to(gameId).emit('gameStateUpdate', gameState);
+      io.to(gameId).emit('gameEnded', { reason, winner });
     });
   
     socket.on('disconnect', () => {
