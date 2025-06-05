@@ -87,6 +87,28 @@ function getLegalMovesRaw(pos, state = window.currentGameState.board, skipKingCh
         moves.push(np);
       }
     }
+
+    // Add castling moves
+    if (!castlingRights[color].kingMoved) {
+      // Kingside castling
+      if (!castlingRights[color].rookHMoved) {
+        const canCastleKingside = ['f' + rank, 'g' + rank].every(square => 
+          !state[square] && !isSquareAttacked(square, color, state)
+        );
+        if (canCastleKingside) {
+          moves.push('g' + rank);
+        }
+      }
+      // Queenside castling
+      if (!castlingRights[color].rookAMoved) {
+        const canCastleQueenside = ['b' + rank, 'c' + rank, 'd' + rank].every(square => 
+          !state[square] && !isSquareAttacked(square, color, state)
+        );
+        if (canCastleQueenside) {
+          moves.push('c' + rank);
+        }
+      }
+    }
   }
 
   if (type === 'n') {
@@ -206,6 +228,23 @@ function updateBoard(gameState) {
     const toSquare = document.getElementById(to);
     if (fromSquare) fromSquare.classList.add("highlightLast");
     if (toSquare) toSquare.classList.add("highlightLast");
+
+    // Update castling rights
+    const piece = gameState.board[to];
+    if (piece) {
+      const color = piece[0];
+      const type = piece[1];
+      
+      if (type === 'k') {
+        castlingRights[color].kingMoved = true;
+      }
+      else if (type === 'r') {
+        if (from === 'a1') castlingRights['w'].rookAMoved = true;
+        if (from === 'h1') castlingRights['w'].rookHMoved = true;
+        if (from === 'a8') castlingRights['b'].rookAMoved = true;
+        if (from === 'h8') castlingRights['b'].rookHMoved = true;
+      }
+    }
   }
 }
 
@@ -224,6 +263,32 @@ function handleSelect(pos) {
 
     if (moveSound) {
         moveSound.play();
+    }
+
+    // Handle castling
+    if (piece && piece[1] === 'k') {
+      const rank = pos[1];
+      const file = pos[0];
+      const isCastling = Math.abs(files.indexOf(file) - files.indexOf(selected[0])) === 2;
+      
+      if (isCastling) {
+        // Kingside castling
+        if (file === 'g') {
+          socket.emit('makeMove', {
+            gameId: window.gameId,
+            from: 'h' + rank,
+            to: 'f' + rank
+          });
+        }
+        // Queenside castling
+        else if (file === 'c') {
+          socket.emit('makeMove', {
+            gameId: window.gameId,
+            from: 'a' + rank,
+            to: 'd' + rank
+          });
+        }
+      }
     }
 
     socket.emit('makeMove', { 

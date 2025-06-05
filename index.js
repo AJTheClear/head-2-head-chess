@@ -17,7 +17,6 @@ app.use(express.static("homePage"));
 app.use(express.static("gamePage"));
 app.use('/img', express.static('img'));
 app.use('/audio', express.static('audio'));
-
 app.use('/assets', express.static('assets'));
 app.use('/styles', express.static('styles'));
 app.use('/utils', express.static('utils'));

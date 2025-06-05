@@ -76,11 +76,11 @@ class AuthService {
 
 		// Check if username or email already exists
 		const existingUserByUsername = userDatabase.find(
-			(user) => user.username.toLowerCase() === userData.username.toLowerCase()
+			(user) => user.username === userData.username
 		);
 
 		const existingUserByEmail = userDatabase.find(
-			(user) => user.email.toLowerCase() === userData.email.toLowerCase()
+			(user) => user.email === userData.email
 		);
 
 		if (existingUserByUsername) {
