@@ -9,7 +9,8 @@ export async function up(knex: Knex): Promise<void> {
         t.timestamp('date_time_played').defaultTo(knex.fn.now())
         t.string('result').notNullable()
         t.string('state').notNullable()
-      });
+        t.text('moves').notNullable()
+    });
 }
 
 

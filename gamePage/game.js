@@ -88,24 +88,21 @@ function getLegalMovesRaw(pos, state = window.currentGameState.board, skipKingCh
       }
     }
 
-    // Add castling moves
-    if (!castlingRights[color].kingMoved) {
-      // Kingside castling
-      if (!castlingRights[color].rookHMoved) {
-        const canCastleKingside = ['f' + rank, 'g' + rank].every(square => 
-          !state[square] && !isSquareAttacked(square, color, state)
-        );
-        if (canCastleKingside) {
-          moves.push('g' + rank);
+    if (!skipKingCheck && !isKingInCheck(color, state)) {
+      if (!castlingRights[color].kingMoved) {
+        // king side castling
+        if (!state[files[fileIdx+1]+rank] && !state[files[fileIdx+2]+rank] &&
+            !castlingRights[color].rookHMoved) {
+          if (!isSquareAttacked(files[fileIdx+1]+rank, color, state) && !isSquareAttacked(files[fileIdx+2]+rank, color, state)) {
+            moves.push(files[fileIdx+2]+rank);
+          }
         }
-      }
-      // Queenside castling
-      if (!castlingRights[color].rookAMoved) {
-        const canCastleQueenside = ['b' + rank, 'c' + rank, 'd' + rank].every(square => 
-          !state[square] && !isSquareAttacked(square, color, state)
-        );
-        if (canCastleQueenside) {
-          moves.push('c' + rank);
+        // queen side castling
+        if (!state[files[fileIdx-1]+rank] && !state[files[fileIdx-2]+rank] && !state[files[fileIdx-3]+rank] &&
+            !castlingRights[color].rookAMoved) {
+          if (!isSquareAttacked(files[fileIdx-1]+rank, color, state) && !isSquareAttacked(files[fileIdx-2]+rank, color, state)) {
+            moves.push(files[fileIdx-2]+rank);
+          }
         }
       }
     }

@@ -8,7 +8,7 @@ export async function up(knex: Knex): Promise<void> {
         t.string('username').notNullable().unique()
         t.string('password').notNullable()
         t.timestamp('created_at').defaultTo(knex.fn.now())
-        t.integer('elo').notNullable().defaultTo('300')
+        t.integer('elo').notNullable().defaultTo('1200')
     });
 }
 

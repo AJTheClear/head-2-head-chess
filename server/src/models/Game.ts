@@ -1,7 +1,6 @@
 import { Model } from "objection";
 import { BaseModel } from "./BaseModel";
 import { User } from "./User"
-import { Move } from "./Move"
 
 export class Game extends BaseModel {
 
@@ -11,10 +10,9 @@ export class Game extends BaseModel {
     player_id_black!: number
     result!: string
     state!: string
-
+    moves!: string
     playerW?: User
     playerB?: User
-    moves?: Move[]
 
     static get relationMappings() {
 
@@ -34,15 +32,6 @@ export class Game extends BaseModel {
                 join: {
                     from: 'games.player_id_black',
                     to: 'users.id'
-                }
-            },
-
-            moves: {
-                relation: Model.HasManyRelation,
-                modelClass: Move,
-                join: {
-                    from: 'games.game_id',
-                    to: 'moves.game_id'
                 }
             }
         }
