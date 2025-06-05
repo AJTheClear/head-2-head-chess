@@ -189,6 +189,7 @@ body {
 .sub-menu-link {
     display: flex;
     align-items: center;
+    text-align: center;
     color: #fff;
     margin: 8px 0;
     padding: 12px;

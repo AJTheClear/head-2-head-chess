@@ -199,6 +199,12 @@
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
 
+/* Email placeholder styling to match phone input */
+.form-group input[type="email"]::placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
 .optional {
     font-weight: normal;
     color: #888;
@@ -705,4 +711,77 @@ input:checked+.toggle-slider:before {
 .account-nav-item.active {
     color: #fff !important;
     /* останалите свойства остават както са */
+}
+
+/* ─── Phone Country Code ──────────────────────────────────────────────── */
+
+/* Phone Input Container Styles */
+.phone-input-container {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--border-color);
+    /* ← Changed from 2px to 1px */
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--primary-bg);
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.phone-input-container:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    /* ← Keep this the same as other form fields */
+}
+
+.country-code-input {
+    width: 80px !important;
+    min-width: 80px !important;
+    max-width: 80px !important;
+    flex: none !important;
+    padding: 10px 8px;
+    border: none;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-bg-dark) 100%);
+    color: var(--color-accent);
+    font-weight: 700;
+    text-align: center;
+    border-right: 2px solid var(--color-accent);
+    cursor: not-allowed;
+    font-size: 14px;
+}
+
+.country-code-input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.phone-input-container #phone {
+    flex: 1;
+    padding: 10px 12px;
+    border: none;
+    background-color: var(--primary-bg);
+    color: var(--text-color);
+    width: auto;
+    font-size: 16px;
+}
+
+.phone-input-container #phone:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.phone-input-container #phone::placeholder {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .country-code-input {
+        width: 70px !important;
+        min-width: 70px !important;
+        padding: 10px 6px;
+        font-size: 14px;
+    }
 }
