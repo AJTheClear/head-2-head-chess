@@ -5,7 +5,7 @@
     --secondary-bg: #f5f8fc;
     --navbar-bg: #ffffff;
     --text-color: #333;
-    --text-muted: #666;
+    --text-muted: #999999;
     --link-color: #1a73e8;
     --border-color: #e5e7eb;
     --overlay-bg: rgba(255, 255, 255, 0.8);
@@ -24,8 +24,6 @@
 
     --color-bg-dark: #2b3645;
     /* навбар тъмно-синьо */
-    --color-accent: #f0b90b;
-    /* жълто акцентче */
     --color-bg-light: #fafafa;
     /* светъл фон на секции */
     --color-text-primary: #333;

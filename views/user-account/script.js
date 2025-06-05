@@ -49,6 +49,195 @@ document.addEventListener("DOMContentLoaded", function () {
 	const reqNumber = document.getElementById("req-number");
 	const reqSpecial = document.getElementById("req-special");
 
+	// Add this variable to store country phone codes
+	let countryPhoneCodes = [];
+
+	// Add this function to load country phone codes
+	async function loadCountryPhoneCodes() {
+		try {
+			const response = await fetch("../../utils/country-phone-codes.json");
+			if (!response.ok) {
+				throw new Error("Failed to fetch country phone codes");
+			}
+			countryPhoneCodes = await response.json();
+			console.log("Country phone codes loaded successfully");
+		} catch (error) {
+			console.error("Error loading country phone codes:", error);
+		}
+	}
+
+	// Add this function to update country code based on selected country
+	function updateCountryCode(selectedCountry) {
+		const countryCodeInput = document.getElementById("country-code");
+		if (!countryCodeInput || !countryPhoneCodes.length) return;
+
+		// Find the country in the phone codes data
+		const countryData = countryPhoneCodes.find(
+			(country) => country.name.toLowerCase() === selectedCountry.toLowerCase()
+		);
+
+		if (countryData) {
+			countryCodeInput.value = countryData.dial_code;
+		} else {
+			// Fallback to a default if country not found
+			countryCodeInput.value = "+1";
+			console.warn(`Country code not found for: ${selectedCountry}`);
+		}
+	}
+
+	// Modified phone validation function
+	function validatePhoneNumber(phoneInput) {
+		const phoneValue = phoneInput.value.trim();
+		const countryCodeInput = document.getElementById("country-code");
+
+		if (!phoneValue) {
+			alert("Please enter a phone number");
+			return false;
+		}
+
+		// Check if phone number contains only digits, spaces, and hyphens
+		if (!/^[\d\s\-]+$/.test(phoneValue)) {
+			alert("Phone number can only contain digits, spaces, and hyphens");
+			return false;
+		}
+
+		// Check minimum length (without spaces and hyphens)
+		const digitsOnly = phoneValue.replace(/[\s\-]/g, "");
+		if (digitsOnly.length < 6) {
+			alert("Please enter a valid phone number (minimum 6 digits)");
+			return false;
+		}
+
+		if (digitsOnly.length > 15) {
+			alert("Phone number is too long (maximum 15 digits)");
+			return false;
+		}
+
+		return true;
+	}
+
+	// Modified initializePhoneInput function
+	function initializePhoneInput() {
+		const phoneInput = document.getElementById("phone");
+		const countryCodeInput = document.getElementById("country-code");
+
+		if (!phoneInput || !countryCodeInput) return;
+
+		// Handle keydown to allow only digits, spaces, and hyphens
+		phoneInput.addEventListener("keydown", function (e) {
+			// Allow: navigation keys, backspace, delete, tab
+			if ([8, 9, 35, 36, 37, 38, 39, 40, 46].indexOf(e.keyCode) !== -1) {
+				return;
+			}
+
+			// Allow: space (32) and hyphen (189, 109)
+			if ([32, 189, 109].indexOf(e.keyCode) !== -1) {
+				return;
+			}
+
+			// Block any non-digit keys
+			if (
+				(e.keyCode < 48 || e.keyCode > 57) &&
+				(e.keyCode < 96 || e.keyCode > 105)
+			) {
+				e.preventDefault();
+			}
+		});
+
+		// Clean up any invalid characters that might get pasted
+		phoneInput.addEventListener("input", function () {
+			const cursorPos = this.selectionStart;
+			const originalValue = this.value;
+			this.value = this.value.replace(/[^\d\s\-]/g, "");
+
+			// Restore cursor position if value changed
+			if (originalValue !== this.value) {
+				this.setSelectionRange(cursorPos - 1, cursorPos - 1);
+			}
+		});
+
+		// Format phone number on blur
+		phoneInput.addEventListener("blur", function () {
+			// Remove extra spaces and format nicely
+			this.value = this.value.replace(/\s+/g, " ").trim();
+		});
+	}
+
+	// Add event listener for country selection change
+	function setupCountryChangeListener() {
+		const editContactInfoBtn = document.getElementById("edit-contact-info");
+		if (!editContactInfoBtn) return;
+
+		// Override the existing click handler to include country code update
+		editContactInfoBtn.addEventListener("click", () => {
+			// Default to Bulgaria since Account Settings doesn't have country selection
+			// In the future, this could be integrated with user profile data
+			updateCountryCode("Bulgaria");
+
+			// Show edit mode (existing functionality)
+			document.getElementById("contact-info-view").classList.add("hidden");
+			document.getElementById("contact-info-edit").classList.remove("hidden");
+			editContactInfoBtn.style.display = "none";
+		});
+	}
+
+	// Modified contact info form submit handler
+	function setupContactFormHandler() {
+		const contactInfoForm = document.getElementById("contact-info-form");
+		if (!contactInfoForm) return;
+
+		contactInfoForm.addEventListener("submit", (e) => {
+			e.preventDefault();
+
+			// Phone validation
+			const phoneInput = document.getElementById("phone");
+			if (!validatePhoneNumber(phoneInput)) {
+				return;
+			}
+
+			const confirmationModal = document.getElementById("confirmation-modal");
+			const modalTitle = document.getElementById("modal-title");
+			const modalMessage = document.getElementById("modal-message");
+			const confirmButton = document.getElementById("confirm-button");
+
+			// Show confirmation modal
+			modalTitle.textContent = "Update Contact Information";
+			modalMessage.textContent =
+				"Are you sure you want to update your contact information?";
+
+			confirmButton.onclick = () => {
+				// Get form values
+				const email = document.getElementById("email").value;
+				const countryCode = document.getElementById("country-code").value;
+				const phoneNumber = phoneInput.value;
+				const fullPhoneNumber = `${countryCode} ${phoneNumber}`;
+
+				// Update displayed values
+				document.getElementById("email-display").textContent = email;
+				document.getElementById("phone-display").textContent = fullPhoneNumber;
+
+				// Hide edit mode and show view mode
+				document.getElementById("contact-info-view").classList.remove("hidden");
+				document.getElementById("contact-info-edit").classList.add("hidden");
+
+				// Show the edit button again
+				document.getElementById("edit-contact-info").style.display = "";
+
+				// Hide confirmation modal
+				confirmationModal.classList.remove("active");
+
+				// Show success modal
+				const successModal = document.getElementById("success-modal");
+				const successMessage = document.getElementById("success-message");
+				successMessage.textContent =
+					"Your contact information has been updated successfully.";
+				successModal.classList.add("active");
+			};
+
+			confirmationModal.classList.add("active");
+		});
+	}
+
 	// Tab Navigation
 	navItems.forEach((item) => {
 		item.addEventListener("click", function (e) {
@@ -187,43 +376,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		});
 	}
 
-	if (contactInfoForm) {
-		contactInfoForm.addEventListener("submit", (e) => {
-			e.preventDefault();
-
-			// Phone validation
-			const phoneInput = document.getElementById("phone");
-			if (!validatePhoneNumber(phoneInput)) {
-				return;
-			}
-
-			showConfirmationModal(
-				"Update Contact Information",
-				"Are you sure you want to update your contact information?",
-				() => {
-					// Get form values
-					const email = document.getElementById("email").value;
-					const phone = document.getElementById("phone").value;
-
-					// Update displayed values
-					document.getElementById("email-display").textContent = email;
-					document.getElementById("phone-display").textContent = phone;
-
-					// Hide edit mode and show view mode
-					contactInfoView.classList.remove("hidden");
-					contactInfoEdit.classList.add("hidden");
-
-					// Show the edit button again
-					editContactInfoBtn.style.display = "";
-
-					showSuccessModal(
-						"Your contact information has been updated successfully."
-					);
-				}
-			);
-		});
-	}
-
 	// Password Validation
 	if (newPasswordInput) {
 		newPasswordInput.addEventListener("input", validatePassword);
@@ -341,35 +493,6 @@ document.addEventListener("DOMContentLoaded", function () {
 		savePasswordBtn.disabled = !(isValid && passwordsMatch);
 	}
 
-	function validatePhoneNumber(phoneInput) {
-		const phoneValue = phoneInput.value.trim(); // Removes whitespaces from the string
-
-		if (!phoneValue.startsWith("+")) {
-			alert('Phone number must start with a "+" symbol');
-			return false;
-		}
-
-		if (phoneValue.length <= 1) {
-			alert(
-				'Please enter a valid phone number with digits after the "+" symbol'
-			);
-			return false;
-		}
-
-		return true;
-	}
-
-	// function validatePhoneNumber(phoneInput) {
-	// 	const phoneValue = phoneInput.value.trim();
-
-	// 	if (phoneValue && !phoneValue.startsWith("+")) {
-	// 		alert('Phone number must start with a "+" symbol');
-	// 		return false;
-	// 	}
-
-	// 	return true;
-	// }
-
 	function updateRequirementStatus(element, isValid) {
 		if (!element) return;
 
@@ -404,61 +527,15 @@ document.addEventListener("DOMContentLoaded", function () {
 		sections[0].classList.add("active");
 	}
 
-	function initializePhoneInput() {
-		const phoneInput = document.getElementById("phone");
-		if (!phoneInput) return;
+	// Load country phone codes
+	loadCountryPhoneCodes();
 
-		// Ensure the "+" is always present at the beginning
-		function ensurePlusSign() {
-			if (!phoneInput.value.startsWith("+")) {
-				phoneInput.value = "+" + phoneInput.value.replace(/\D/g, "");
-			}
-		}
+	// Setup country change listener
+	setupCountryChangeListener();
 
-		// Initialize with "+" if empty
-		phoneInput.addEventListener("focus", function () {
-			if (!this.value) {
-				this.value = "+";
-			}
-		});
+	// Setup contact form handler (replaces existing)
+	setupContactFormHandler();
 
-		// Prevent cursor from moving before the "+"
-		phoneInput.addEventListener("click", function () {
-			if (this.selectionStart === 0) {
-				this.setSelectionRange(1, 1);
-			}
-		});
-
-		// Handle keydown to control what can be entered
-		phoneInput.addEventListener("keydown", function (e) {
-			// Allow: navigation keys, backspace, delete, tab
-			if ([8, 9, 35, 36, 37, 38, 39, 40, 46].indexOf(e.keyCode) !== -1) {
-				// Prevent cursor from deleting the "+"
-				if (e.keyCode === 8 && this.selectionStart <= 1) {
-					e.preventDefault();
-				}
-				return;
-			}
-
-			// Block any non-digit keys
-			if (
-				(e.keyCode < 48 || e.keyCode > 57) &&
-				(e.keyCode < 96 || e.keyCode > 105)
-			) {
-				e.preventDefault();
-			}
-		});
-
-		// Clean up any non-digit characters that might get pasted
-		phoneInput.addEventListener("input", function () {
-			const cursorPos = this.selectionStart;
-			this.value = "+" + this.value.substring(1).replace(/\D/g, "");
-			this.setSelectionRange(cursorPos, cursorPos);
-		});
-
-		// Ensure the "+" is always there when losing focus
-		phoneInput.addEventListener("blur", ensurePlusSign);
-	}
-
+	// Initialize phone input (replaces existing)
 	initializePhoneInput();
 });
