@@ -31,15 +31,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 			if (isValid) {
 				// Attempt login
-				const result = authService.login(username, password);
-
-				if (result.success) {
-					// Redirect to home page
-					window.location.href = "/";
-				} else {
-					// Display error message
-					document.getElementById("password-error").textContent = result.error;
-				}
+				authService.login(username, password).then(result => {
+					if (result.success) {
+						// Redirect to home page
+						window.location.href = "/";
+					} else {
+						// Display error message
+						console.log("something went wronf when logging in", username, password)
+						document.getElementById("password-error").textContent = result.error;
+					}
+				});
 			}
 		});
 	}

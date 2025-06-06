@@ -21,7 +21,6 @@
 
         <!-- Right Side: Search and Profile -->
         <div class="nav-right">
-            <img src="../../assets/images/loupe.png" class="search-icon" onclick="toggleSearch()">
             <img src="../../assets/images/SungJinWoo_ProfilePic.png" class="user-pic" onclick="toggleMenu()">
 
             <!-- Profile Dropdown -->
@@ -68,27 +67,11 @@
         </div>
     </nav>
 
-    <!-- Search Overlay -->
-    <div class="search-overlay" id="searchOverlay">
-        <div class="search-container">
-            <div class="search-box">
-                <img src="../../assets/images/loupe.png" class="search-box-icon">
-                <input type="text" id="searchInput" placeholder="Search h2hchess.com" autocomplete="off">
-            </div>
-            <div class="search-results" id="searchResults">
-                <div class="search-results-empty">
-                    Type to search for players, games, or tournaments
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Overlay for dimming -->
     <div id="overlay" class="overlay"></div>
 
     <!-- Add utility scripts before main script -->
     <script src="../../utils/auth.js"></script>
-    <script src="../../utils/search.js"></script>
     <script src="../../utils/theme.js"></script>
     <script src="script.js"></script>
 

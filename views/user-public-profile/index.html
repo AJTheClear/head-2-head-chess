@@ -82,12 +82,12 @@
             <form id="edit-profile-form">
                 <div class="form-group">
                     <label for="edit-username">Username</label>
-                    <input type="text" id="edit-username" name="username" value="Nick Georgiev">
+                    <input type="text" id="edit-username" name="username" style="color: var(--text-muted)" placeholder="Enter new username">
                 </div>
                 <div class="form-group">
                     <label for="edit-bio">Short Bio</label>
-                    <textarea id="edit-bio" name="bio" rows="3"
-                        maxlength="100">Chess enthusiast from Sofia, Bulgaria. Looking forward to playing with y'all.😎</textarea>
+                    <textarea id="edit-bio" name="bio" rows="3" style="color: var(--text-muted)" placeholder="Enter new username"
+                        maxlength="100"></textarea>
                     <!-- Character counter will be inserted here by JavaScript -->
                 </div>
                 <div class="form-group">
@@ -128,6 +128,7 @@
     </div>
 
     <!-- Load Scripts -->
+    <script src="../../utils/auth.js"></script>
     <script src="../../scripts/load-navbar.js"></script>
     <script src="script.js"></script>
 </body>

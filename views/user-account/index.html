@@ -58,15 +58,15 @@
                         <form id="personal-info-form">
                             <div class="form-group">
                                 <label for="first-name">First Name</label>
-                                <input type="text" id="first-name" name="firstName" value="Nick" required>
+                                <input type="text" id="first-name" name="firstName" required>
                             </div>
                             <div class="form-group">
                                 <label for="middle-name">Middle Name <span class="optional">(optional)</span></label>
-                                <input type="text" id="middle-name" name="middleName" value="Svetoslavov">
+                                <input type="text" id="middle-name" name="middleName">
                             </div>
                             <div class="form-group">
                                 <label for="last-name">Last Name</label>
-                                <input type="text" id="last-name" name="lastName" value="Georgiev" required>
+                                <input type="text" id="last-name" name="lastName" required>
                             </div>
                             <div class="form-actions">
                                 <button type="submit" class="btn-primary">Save Changes</button>
@@ -86,7 +86,7 @@
                     <!-- View Mode -->
                     <div class="view-mode" id="password-view">
                         <p class="section-description">
-                            Your password was last changed on <span id="last-password-change">April 28, 2025</span>.
+                            Your password was last changed on <span id="last-password-change"></span>.
                         </p>
                         <div class="password-info">
                             <div class="password-dots">••••••••</div>
@@ -141,11 +141,11 @@
                     <div class="view-mode" id="contact-info-view">
                         <div class="info-row">
                             <div class="info-label">Email Address</div>
-                            <div class="info-value" id="email-display">nick.georgiev@example.com</div>
+                            <div class="info-value" id="email-display"></div>
                         </div>
                         <div class="info-row">
                             <div class="info-label">Phone Number</div>
-                            <div class="info-value" id="phone-display">+359 88 123 4567</div>
+                            <div class="info-value" id="phone-display"></div>
                         </div>
                     </div>
 
@@ -154,15 +154,15 @@
                         <form id="contact-info-form">
                             <div class="form-group">
                                 <label for="email">Email Address</label>
-                                <input type="email" id="email" name="email" value="nick.georgiev@example.com"
-                                    placeholder="Enter email address" required>
+                                <input type="email" id="email" name="email"
+                                    placeholder="Enter email address" style="color: var(--text-muted)">
                             </div>
                             <div class="form-group">
                                 <label for="phone">Phone Number</label>
                                 <div class="phone-input-container">
                                     <input type="text" id="country-code" class="country-code-input" value="+359"
                                         readonly>
-                                    <input type="tel" id="phone" name="phone" value="88 123 4567"
+                                    <input type="tel" id="phone" name="phone" style="color: var(--text-muted)"
                                         placeholder="Enter phone number">
                                 </div>
                             </div>
@@ -206,6 +206,7 @@
     </div>
 
     <!-- Load Navbar Script -->
+    <script src="../../utils/auth.js"></script>
     <script src="../../scripts/load-navbar.js"></script>
     <script src="script.js"></script>
 </body>

@@ -432,6 +432,9 @@ socket.on('error', (error) => {
 socket.on('gameEnded', (data) => {
   const messageBox = document.getElementById("messageBox");
   messageBox.value += `Game ended: ${data.reason}\n`;
+
+  //db call
+
   setTimeout(() => {
     window.location.href = '/';
   }, 8000);

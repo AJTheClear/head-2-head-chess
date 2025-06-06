@@ -52,6 +52,26 @@ document.addEventListener("DOMContentLoaded", function () {
 	// Add this variable to store country phone codes
 	let countryPhoneCodes = [];
 
+	document.getElementById("email-display").textContent = authService.getCurrentUser().email;
+	document.getElementById("phone-display").textContent = authService.getCurrentUser().phoneNumber;
+	document.getElementById("first-name-display").textContent = authService.getCurrentUser().firstName;
+	document.getElementById("middle-name-display").textContent = authService.getCurrentUser().middleName;
+	document.getElementById("last-name-display").textContent = authService.getCurrentUser().lastName;
+
+	// Format last password change date
+	const lastPasswordChange = authService.getCurrentUser().passwordLastChangedAt;
+	if (lastPasswordChange) {
+		const date = new Date(lastPasswordChange);
+		const formattedDate = new Intl.DateTimeFormat("en-US", {
+			month: "long",
+			day: "numeric",
+			year: "numeric",
+		}).format(date);
+		document.getElementById("last-password-change").textContent = formattedDate;
+	} else {
+		document.getElementById("last-password-change").textContent = "Never";
+	}
+
 	// Add this function to load country phone codes
 	async function loadCountryPhoneCodes() {
 		try {
@@ -172,7 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		editContactInfoBtn.addEventListener("click", () => {
 			// Default to Bulgaria since Account Settings doesn't have country selection
 			// In the future, this could be integrated with user profile data
-			updateCountryCode("Bulgaria");
+			updateCountryCode(authService.getCurrentUser().country);
 
 			// Show edit mode (existing functionality)
 			document.getElementById("contact-info-view").classList.add("hidden");
@@ -182,7 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	// Modified contact info form submit handler
-	function setupContactFormHandler() {
+	async function setupContactFormHandler() {
 		const contactInfoForm = document.getElementById("contact-info-form");
 		if (!contactInfoForm) return;
 
@@ -211,6 +231,40 @@ document.addEventListener("DOMContentLoaded", function () {
 				const countryCode = document.getElementById("country-code").value;
 				const phoneNumber = phoneInput.value;
 				const fullPhoneNumber = `${countryCode} ${phoneNumber}`;
+
+				// Call API to update contact info
+				const currentUser = authService.getCurrentUser();
+				if (!currentUser) {
+					throw new Error('Not logged in');
+				}
+
+				fetch(`/api/users/${currentUser.id}/contact`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						email,
+						phoneNumber: fullPhoneNumber
+					})
+				})
+				.then(response => {
+					if (!response.ok) {
+						return response.json().then(data => {
+							throw new Error(data.error || 'Грешка при обновяване на контактната информация');
+						});
+					}
+					return response.json();
+				})
+				.then(data => {
+					// Update session storage with new user data
+					authService.setCurrentUser(data.user);
+				})
+				.catch(error => {
+					console.error('Update contact error:', error);
+					alert(error.message);
+					return;
+				});
 
 				// Update displayed values
 				document.getElementById("email-display").textContent = email;
@@ -323,10 +377,44 @@ document.addEventListener("DOMContentLoaded", function () {
 					const middleName = document.getElementById("middle-name").value;
 					const lastName = document.getElementById("last-name").value;
 
+					// Call API to update names
+					const currentUser = authService.getCurrentUser();
+					if (!currentUser) {
+						throw new Error('Not logged in');
+					}
+
+					fetch(`/api/users/${currentUser.id}/names`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+							firstName,
+							middleName,
+							lastName
+						})
+					})
+					.then(response => {
+						if (!response.ok) {
+							return response.json().then(data => {
+								throw new Error(data.error || 'Грешка при обновяване на имената');
+							});
+						}
+						return response.json();
+					})
+					.then(data => {
+						// Update session storage with new user data
+						authService.setCurrentUser(data.user);
+					})
+					.catch(error => {
+						console.error('Update names error:', error);
+						alert(error.message);
+						return;
+					});
+
 					// Update displayed values
 					document.getElementById("first-name-display").textContent = firstName;
-					document.getElementById("middle-name-display").textContent =
-						middleName;
+					document.getElementById("middle-name-display").textContent = middleName;
 					document.getElementById("last-name-display").textContent = lastName;
 
 					// Hide edit mode and show view mode
@@ -348,18 +436,44 @@ document.addEventListener("DOMContentLoaded", function () {
 				"Change Password",
 				"Are you sure you want to change your password?",
 				() => {
-					// In a real application, this would send the password update to the server
-
 					// Update last changed date
-					const today = new Date();
-					const formattedDate = new Intl.DateTimeFormat("en-US", {
-						month: "long",
-						day: "numeric",
-						year: "numeric",
-					}).format(today);
+					oldPass = document.getElementById("current-password");
+					newPass = document.getElementById("new-password");
+					confirmPass = document.getElementById("confirm-password");
 
-					document.getElementById("last-password-change").textContent =
-						formattedDate;
+					// Call API to update password
+					const currentUser = authService.getCurrentUser();
+					if (!currentUser) {
+						throw new Error('Not logged in');
+					}
+
+					fetch(`/api/users/${currentUser.id}/password`, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify({
+							oldPassword: oldPass.value,
+							newPassword: newPass.value
+						})
+					})
+					.then(response => {
+						if (!response.ok) {
+							return response.json().then(data => {
+								throw new Error(data.error || 'Грешка при промяната на паролата');
+							});
+						}
+						return response.json();
+					})
+					.then(data => {
+						// Update session storage with new user data
+						authService.setCurrentUser(data.user);
+					})
+					.catch(error => {
+						console.error('Update password error:', error);
+						alert(error.message);
+						return;
+					});
 
 					// Hide edit mode and show view mode
 					passwordView.classList.remove("hidden");

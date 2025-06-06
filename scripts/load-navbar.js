@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 				navbarScript.src = "/components/navbar/script.js";
 				document.body.appendChild(navbarScript);
 			}
+			
 		} else {
 			console.error("Navbar container not found in the document");
 		}

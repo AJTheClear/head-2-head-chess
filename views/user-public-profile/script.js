@@ -28,24 +28,39 @@ document.addEventListener("DOMContentLoaded", async () => {
 	// Initialize form validations
 	initializeFormValidation();
 
-	// Mock authentication service for development
-	if (typeof authService !== "undefined") {
-		const me = authService.getCurrentUser();
-		if (me) {
-			// username
-			document.getElementById("username").textContent = me.username;
-			// bio
-			document.getElementById("user-bio").textContent = me.bio || "";
-			// country
-			document.getElementById("country-value").textContent = me.country;
-			// avatar
-			document.getElementById("profile-avatar").src =
-				me.avatarUrl || "../../assets/images/SungJinWoo_ProfilePic.png";
-			// ELO
-			document.getElementById("elo-value").textContent = me.elo;
-		}
-	}
+	
 });
+
+if (typeof window.authService === "undefined") {
+	// Create basic fallback functions if auth.js isn't loaded
+	window.authService = {
+		getCurrentUser: function () {
+			return JSON.parse(sessionStorage.getItem("currentUser"));
+		},
+		logout: function () {
+			sessionStorage.removeItem("currentUser");
+			window.location.href = "../../views/login-page/index.html";
+		},
+		isLoggedIn: function () {
+			return !!this.getCurrentUser();
+		},
+	};
+}
+
+const me = authService.getCurrentUser();
+if (me) {
+	// username
+	document.getElementById("username").textContent = me.username;
+	// bio
+	document.getElementById("user-bio").textContent = me.bio || "";
+	// country
+	document.getElementById("country-value").textContent = me.country;
+	// avatar
+	document.getElementById("profile-avatar").src =
+		me.avatarUrl || "../../assets/images/SungJinWoo_ProfilePic.png";
+	// ELO
+	document.getElementById("elo-value").textContent = me.elo;
+}
 
 function populateCountrySelect(countries) {
 	const countrySelect = document.getElementById("edit-country");
@@ -60,11 +75,7 @@ function populateCountrySelect(countries) {
 		option.value = country.name;
 		option.textContent = country.name;
 
-		// Set Bulgaria as selected country
-		if (country.name === "Bulgaria") {
-			option.selected = true;
-		}
-
+		option.defaultSelected = undefined
 		countrySelect.appendChild(option);
 	});
 }
@@ -233,7 +244,7 @@ function validateBio(textarea, validationElement, maxLength) {
 	return isValid;
 }
 
-function setupEventListeners() {
+async function setupEventListeners() {
 	// Edit profile button
 	const editProfileBtn = document.getElementById("edit-profile-btn");
 	const editProfileModal = document.getElementById("edit-profile-modal");
@@ -337,6 +348,7 @@ function setupEventListeners() {
 			const username = document.getElementById("edit-username").value.trim();
 			const bio = document.getElementById("edit-bio").value.trim();
 			const country = document.getElementById("edit-country").value;
+			
 
 			// Validate form
 			const usernameInput = document.getElementById("edit-username");
@@ -364,14 +376,6 @@ function setupEventListeners() {
 				return;
 			}
 
-			// Persist changes in our mock database
-			if (
-				window.authService &&
-				typeof authService.updateUserProfile === "function"
-			) {
-				authService.updateUserProfile({ username, bio, country });
-			}
-
 			// Update the profile information
 			document.getElementById("username").textContent = username;
 			document.getElementById("user-bio").textContent = bio;
@@ -379,6 +383,9 @@ function setupEventListeners() {
 
 			// Close the modal
 			editProfileModal.classList.remove("active");
+
+			//db and session
+			authService.updateUserProfile({ username, bio, country })
 		});
 	}
 

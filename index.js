@@ -1,9 +1,11 @@
 import express from 'express'
 import cors from 'cors'
+import knex from 'knex';
 import router from './routes/defaultPageRouter.js';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { Game } from './game.js';
+import config from './knexfile.js';
 
 const app = express();
 const httpServer = createServer(app);
@@ -11,27 +13,31 @@ const io = new Server(httpServer);
 
 export const games = new Map();
 
-app.use(cors())
-app.use(express.json())
-app.use(express.static("homePage"));
-app.use(express.static("gamePage"));
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Static files
+app.use(express.static('homePage'));
+app.use(express.static('gamePage'));
 app.use('/img', express.static('img'));
 app.use('/audio', express.static('audio'));
 app.use('/assets', express.static('assets'));
 app.use('/styles', express.static('styles'));
 app.use('/utils', express.static('utils'));
 app.use('/scripts', express.static('scripts'));
-app.use('/views/user-account', express.static('views/user-account'));
-app.use('/views/user-public-profile', express.static('views/user-public-profile'));
-app.use('/views/register-page', express.static('views/register-page'));
-app.use('/views/login-page', express.static('views/login-page'));
-app.use('/views/play-page', express.static('views/play-page'));
-app.use('/views/home-page', express.static('views/home-page'));
-app.use('/views/help-page', express.static('views/help-page'));
-app.use('/views/about-page', express.static('views/about-page'));
+app.use('/views', express.static('views'));
 app.use('/components/navbar', express.static('components/navbar'));
 
 app.use('/', router)
+
+// Knex connection
+const db = knex(config.development);
+export { db };
+
+// API routes
+import userRouter from './routes/userRouter.js';
+app.use('/api/users', userRouter);
 
 io.on('connection', (socket) => {
     console.log('New client connected');
