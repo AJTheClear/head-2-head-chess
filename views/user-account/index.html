@@ -6,21 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Settings - H2H Chess</title>
 
-    <!-- Stylesheets -->
+    <!-- External Stylesheets -->
     <link rel="stylesheet" href="../../styles/global.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-
-    <!-- Navbar will be loaded dynamically -->
+    <!-- Dynamic Navbar Container -->
     <div id="navbar-container"></div>
 
+    <!-- Main Account Container -->
     <div class="account-container">
         <h1>Account Settings</h1>
         <p class="account-subtitle">Manage your personal information and account preferences</p>
 
         <div class="account-content">
+            <!-- Account Navigation Sidebar -->
             <div class="account-sidebar">
                 <div class="account-nav">
                     <a href="#" class="account-nav-item active" data-section="personal-info">Personal Information</a>
@@ -29,6 +30,7 @@
                 </div>
             </div>
 
+            <!-- Account Settings Sections -->
             <div class="account-sections">
                 <!-- Personal Information Section -->
                 <div class="account-section active" id="personal-info-section">
@@ -37,7 +39,7 @@
                         <button class="edit-button" id="edit-personal-info">Edit</button>
                     </div>
 
-                    <!-- View Mode -->
+                    <!-- Personal Info View Mode -->
                     <div class="view-mode" id="personal-info-view">
                         <div class="info-row">
                             <div class="info-label">First Name</div>
@@ -53,7 +55,7 @@
                         </div>
                     </div>
 
-                    <!-- Edit Mode -->
+                    <!-- Personal Info Edit Mode -->
                     <div class="edit-mode hidden" id="personal-info-edit">
                         <form id="personal-info-form">
                             <div class="form-group">
@@ -83,7 +85,7 @@
                         <button class="edit-button" id="edit-password">Change Password</button>
                     </div>
 
-                    <!-- View Mode -->
+                    <!-- Password View Mode -->
                     <div class="view-mode" id="password-view">
                         <p class="section-description">
                             Your password was last changed on <span id="last-password-change"></span>.
@@ -93,7 +95,7 @@
                         </div>
                     </div>
 
-                    <!-- Edit Mode -->
+                    <!-- Password Edit Mode -->
                     <div class="edit-mode hidden" id="password-edit">
                         <form id="password-form">
                             <div class="form-group">
@@ -137,7 +139,7 @@
                         <button class="edit-button" id="edit-contact-info">Edit</button>
                     </div>
 
-                    <!-- View Mode -->
+                    <!-- Contact Info View Mode -->
                     <div class="view-mode" id="contact-info-view">
                         <div class="info-row">
                             <div class="info-label">Email Address</div>
@@ -149,13 +151,13 @@
                         </div>
                     </div>
 
-                    <!-- Edit Mode -->
+                    <!-- Contact Info Edit Mode -->
                     <div class="edit-mode hidden" id="contact-info-edit">
                         <form id="contact-info-form">
                             <div class="form-group">
                                 <label for="email">Email Address</label>
-                                <input type="email" id="email" name="email"
-                                    placeholder="Enter email address" style="color: var(--text-muted)">
+                                <input type="email" id="email" name="email" placeholder="Enter email address"
+                                    style="color: var(--text-muted)">
                             </div>
                             <div class="form-group">
                                 <label for="phone">Phone Number</label>
@@ -205,7 +207,7 @@
         </div>
     </div>
 
-    <!-- Load Navbar Script -->
+    <!-- Component Scripts -->
     <script src="../../utils/auth.js"></script>
     <script src="/utils/load-navbar.js"></script>
     <script src="script.js"></script>

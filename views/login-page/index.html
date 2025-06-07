@@ -5,41 +5,53 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login - H2H Chess</title>
-    <!-- Stylesheets -->
+    <!-- External Stylesheets -->
     <link rel="stylesheet" href="../../styles/global.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
+    <!-- Login Form Container -->
     <div class="login-container">
         <div class="login-box">
+            <!-- Login Header Section -->
             <div class="login-header">
                 <h1>H2H Chess</h1>
                 <p>Sign in to your account</p>
             </div>
+
+            <!-- Login Form -->
             <form id="login-form" class="login-form">
+                <!-- Username/Email Input -->
                 <div class="form-group">
                     <label for="username">Username or Email</label>
                     <input class="form-input" id="username" type="text" placeholder="Enter your username or email"
                         required />
                     <span id="username-error" class="error-message"></span>
                 </div>
+
+                <!-- Password Input -->
                 <div class="form-group">
                     <label for="password">Password</label>
                     <input class="form-input" id="password" type="password" placeholder="Enter your password"
                         required />
                     <span id="password-error" class="error-message"></span>
                 </div>
+
+                <!-- Form Actions -->
                 <div class="form-actions">
                     <button type="submit" id="login-btn" class="btn-primary">Sign In</button>
                 </div>
             </form>
+
+            <!-- Login Footer -->
             <div class="login-footer">
                 <p>Don't have an account? <a href="../register-page/index.html">Register now</a></p>
             </div>
         </div>
     </div>
-    <!-- Scripts -->
+
+    <!-- Component Scripts -->
     <script src="../../utils/auth.js"></script>
     <script src="script.js"></script>
 </body>

@@ -42,21 +42,21 @@ head-2-head-chess/
 ├── index.js              # Main server file
 ├── knexfile.ts           # Database configuration
 ├── tsconfig.json         # TypeScript configuration
-├── assets/              # Static assets
-│   ├── audio/          # Sound effects
-│   ├── images/         # General images
-│   └── pieces/         # Chess piece images
-├── components/          # Reusable components
-│   └── navbar/         # Navigation bar component
-├── migrations/          # Database migrations
-├── routes/             # Express routes
-├── server/             # Server-side code
-├── styles/             # CSS styles
-├── utils/              # Utility functions
-│   └── game.js         # Game logic
-└── views/              # Frontend views
-    ├── home-page/      # Home page
-    └── game-page/      # Game page
+├── assets/               # Static assets
+│   ├── audio/            # Sound effects
+│   ├── images/           # General images
+│   └── pieces/           # Chess piece images
+├── components/           # Reusable components
+│   └── navbar/           # Navigation bar component
+├── migrations/           # Database migrations
+├── routes/               # Express routes
+├── server/               # Server-side code
+├── styles/               # CSS styles
+├── utils/                # Utility functions
+│   └── game.js           # Game logic
+└── views/                # Frontend views
+    ├── home-page/        # Home page
+    └── game-page/        # Game page
 ```
 
 ## Features
@@ -85,18 +85,18 @@ head-2-head-chess/
 ## API Endpoints
 
 ### User Routes
-- `POST /api/users` - Register new user
-- `POST /api/users/login` - User login
-- `GET /api/users/:id` - Get user profile
-- `POST /api/users/:id` - Update user profile
-- `POST /api/users/:id/contact` - Update contact info
-- `POST /api/users/:id/names` - Update user names
+- `POST /api/users`              - Register new user
+- `POST /api/users/login`        - User login
+- `GET /api/users/:id`           - Get user profile
+- `POST /api/users/:id`          - Update user profile
+- `POST /api/users/:id/contact`  - Update contact info
+- `POST /api/users/:id/names`    - Update user names
 - `POST /api/users/:id/password` - Change password
-- `GET /api/users/:id/matches` - Get user's match history
+- `GET /api/users/:id/matches`   - Get user's match history
 
 ### Game Routes
-- `POST /api/users/games` - Save game
-- `GET /api/users/:id/matches` - Get match history
+- `POST /api/users/games`        - Save game
+- `GET /api/users/:id/matches`   - Get match history
 
 ## Contributing
 
