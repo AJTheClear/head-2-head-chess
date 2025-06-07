@@ -1,3 +1,8 @@
+/**
+ * User Account Settings Script
+ * Handles user account management, including personal info, password, and contact updates
+ */
+
 // DOM Elements
 document.addEventListener("DOMContentLoaded", function () {
 	// Navigation tabs
@@ -49,14 +54,20 @@ document.addEventListener("DOMContentLoaded", function () {
 	const reqNumber = document.getElementById("req-number");
 	const reqSpecial = document.getElementById("req-special");
 
-	// Add this variable to store country phone codes
+	// Store country phone codes
 	let countryPhoneCodes = [];
 
-	document.getElementById("email-display").textContent = authService.getCurrentUser().email;
-	document.getElementById("phone-display").textContent = authService.getCurrentUser().phoneNumber;
-	document.getElementById("first-name-display").textContent = authService.getCurrentUser().firstName;
-	document.getElementById("middle-name-display").textContent = authService.getCurrentUser().middleName;
-	document.getElementById("last-name-display").textContent = authService.getCurrentUser().lastName;
+	// Initialize user data display
+	document.getElementById("email-display").textContent =
+		authService.getCurrentUser().email;
+	document.getElementById("phone-display").textContent =
+		authService.getCurrentUser().phoneNumber;
+	document.getElementById("first-name-display").textContent =
+		authService.getCurrentUser().firstName;
+	document.getElementById("middle-name-display").textContent =
+		authService.getCurrentUser().middleName;
+	document.getElementById("last-name-display").textContent =
+		authService.getCurrentUser().lastName;
 
 	// Format last password change date
 	const lastPasswordChange = authService.getCurrentUser().passwordLastChangedAt;
@@ -72,7 +83,10 @@ document.addEventListener("DOMContentLoaded", function () {
 		document.getElementById("last-password-change").textContent = "Never";
 	}
 
-	// Add this function to load country phone codes
+	/**
+	 * Loads country phone codes from JSON file
+	 * returns Array of country phone code objects
+	 */
 	async function loadCountryPhoneCodes() {
 		try {
 			const response = await fetch("../../utils/country-phone-codes.json");
@@ -86,12 +100,14 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	}
 
-	// Add this function to update country code based on selected country
+	/**
+	 * Updates country code input based on selected country
+	 * param selectedCountry - The selected country name
+	 */
 	function updateCountryCode(selectedCountry) {
 		const countryCodeInput = document.getElementById("country-code");
 		if (!countryCodeInput || !countryPhoneCodes.length) return;
 
-		// Find the country in the phone codes data
 		const countryData = countryPhoneCodes.find(
 			(country) => country.name.toLowerCase() === selectedCountry.toLowerCase()
 		);
@@ -99,13 +115,16 @@ document.addEventListener("DOMContentLoaded", function () {
 		if (countryData) {
 			countryCodeInput.value = countryData.dial_code;
 		} else {
-			// Fallback to a default if country not found
 			countryCodeInput.value = "+1";
 			console.warn(`Country code not found for: ${selectedCountry}`);
 		}
 	}
 
-	// Modified phone validation function
+	/**
+	 * Validates phone number format
+	 * param phoneInput - The phone input element
+	 * returns Boolean indicating if phone number is valid
+	 */
 	function validatePhoneNumber(phoneInput) {
 		const phoneValue = phoneInput.value.trim();
 		const countryCodeInput = document.getElementById("country-code");
@@ -115,13 +134,11 @@ document.addEventListener("DOMContentLoaded", function () {
 			return false;
 		}
 
-		// Check if phone number contains only digits, spaces, and hyphens
 		if (!/^[\d\s\-]+$/.test(phoneValue)) {
 			alert("Phone number can only contain digits, spaces, and hyphens");
 			return false;
 		}
 
-		// Check minimum length (without spaces and hyphens)
 		const digitsOnly = phoneValue.replace(/[\s\-]/g, "");
 		if (digitsOnly.length < 6) {
 			alert("Please enter a valid phone number (minimum 6 digits)");
@@ -136,7 +153,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		return true;
 	}
 
-	// Modified initializePhoneInput function
+	/**
+	 * Initializes phone input with validation and formatting
+	 */
 	function initializePhoneInput() {
 		const phoneInput = document.getElementById("phone");
 		const countryCodeInput = document.getElementById("country-code");
@@ -190,8 +209,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		// Override the existing click handler to include country code update
 		editContactInfoBtn.addEventListener("click", () => {
-			// Default to Bulgaria since Account Settings doesn't have country selection
-			// In the future, this could be integrated with user profile data
 			updateCountryCode(authService.getCurrentUser().country);
 
 			// Show edit mode (existing functionality)
@@ -235,36 +252,38 @@ document.addEventListener("DOMContentLoaded", function () {
 				// Call API to update contact info
 				const currentUser = authService.getCurrentUser();
 				if (!currentUser) {
-					throw new Error('Not logged in');
+					throw new Error("Not logged in");
 				}
 
 				fetch(`/api/users/${currentUser.id}/contact`, {
-					method: 'POST',
+					method: "POST",
 					headers: {
-						'Content-Type': 'application/json',
+						"Content-Type": "application/json",
 					},
 					body: JSON.stringify({
 						email,
-						phoneNumber: fullPhoneNumber
+						phoneNumber: fullPhoneNumber,
+					}),
+				})
+					.then((response) => {
+						if (!response.ok) {
+							return response.json().then((data) => {
+								throw new Error(
+									data.error || "Error updating contact information"
+								);
+							});
+						}
+						return response.json();
 					})
-				})
-				.then(response => {
-					if (!response.ok) {
-						return response.json().then(data => {
-							throw new Error(data.error || 'Error updating contact information');
-						});
-					}
-					return response.json();
-				})
-				.then(data => {
-					// Update session storage with new user data
-					authService.setCurrentUser(data.user);
-				})
-				.catch(error => {
-					console.error('Update contact error:', error);
-					alert(error.message);
-					return;
-				});
+					.then((data) => {
+						// Update session storage with new user data
+						authService.setCurrentUser(data.user);
+					})
+					.catch((error) => {
+						console.error("Update contact error:", error);
+						alert(error.message);
+						return;
+					});
 
 				// Update displayed values
 				document.getElementById("email-display").textContent = email;
@@ -380,41 +399,42 @@ document.addEventListener("DOMContentLoaded", function () {
 					// Call API to update names
 					const currentUser = authService.getCurrentUser();
 					if (!currentUser) {
-						throw new Error('Not logged in');
+						throw new Error("Not logged in");
 					}
 
 					fetch(`/api/users/${currentUser.id}/names`, {
-						method: 'POST',
+						method: "POST",
 						headers: {
-							'Content-Type': 'application/json',
+							"Content-Type": "application/json",
 						},
 						body: JSON.stringify({
 							firstName,
 							middleName,
-							lastName
+							lastName,
+						}),
+					})
+						.then((response) => {
+							if (!response.ok) {
+								return response.json().then((data) => {
+									throw new Error(data.error || "Error updating names");
+								});
+							}
+							return response.json();
 						})
-					})
-					.then(response => {
-						if (!response.ok) {
-							return response.json().then(data => {
-								throw new Error(data.error || 'Error updating names');
-							});
-						}
-						return response.json();
-					})
-					.then(data => {
-						// Update session storage with new user data
-						authService.setCurrentUser(data.user);
-					})
-					.catch(error => {
-						console.error('Update names error:', error);
-						alert(error.message);
-						return;
-					});
+						.then((data) => {
+							// Update session storage with new user data
+							authService.setCurrentUser(data.user);
+						})
+						.catch((error) => {
+							console.error("Update names error:", error);
+							alert(error.message);
+							return;
+						});
 
 					// Update displayed values
 					document.getElementById("first-name-display").textContent = firstName;
-					document.getElementById("middle-name-display").textContent = middleName;
+					document.getElementById("middle-name-display").textContent =
+						middleName;
 					document.getElementById("last-name-display").textContent = lastName;
 
 					// Hide edit mode and show view mode
@@ -444,36 +464,36 @@ document.addEventListener("DOMContentLoaded", function () {
 					// Call API to update password
 					const currentUser = authService.getCurrentUser();
 					if (!currentUser) {
-						throw new Error('Not logged in');
+						throw new Error("Not logged in");
 					}
 
 					fetch(`/api/users/${currentUser.id}/password`, {
-						method: 'POST',
+						method: "POST",
 						headers: {
-							'Content-Type': 'application/json',
+							"Content-Type": "application/json",
 						},
 						body: JSON.stringify({
 							oldPassword: oldPass.value,
-							newPassword: newPass.value
+							newPassword: newPass.value,
+						}),
+					})
+						.then((response) => {
+							if (!response.ok) {
+								return response.json().then((data) => {
+									throw new Error(data.error || "Error updating password");
+								});
+							}
+							return response.json();
 						})
-					})
-					.then(response => {
-						if (!response.ok) {
-							return response.json().then(data => {
-								throw new Error(data.error || 'Error updating password');
-							});
-						}
-						return response.json();
-					})
-					.then(data => {
-						// Update session storage with new user data
-						authService.setCurrentUser(data.user);
-					})
-					.catch(error => {
-						console.error('Update password error:', error);
-						alert(error.message);
-						return;
-					});
+						.then((data) => {
+							// Update session storage with new user data
+							authService.setCurrentUser(data.user);
+						})
+						.catch((error) => {
+							console.error("Update password error:", error);
+							alert(error.message);
+							return;
+						});
 
 					// Hide edit mode and show view mode
 					passwordView.classList.remove("hidden");
@@ -559,7 +579,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		const confirmPassword = confirmPasswordInput.value;
 		let isValid = true;
 
-		// Check requirements
+		// Check password requirements
 		const hasLength = password.length >= 8;
 		const hasUppercase = /[A-Z]/.test(password);
 		const hasLowercase = /[a-z]/.test(password);
@@ -581,9 +601,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		if (hasNumber) strength++;
 		if (hasSpecial) strength++;
 
+		// Update strength bar visual
 		passwordStrengthBar.className = "strength-bar";
 		passwordStrengthBar.style.width = (strength / 5) * 100 + "%";
 
+		// Set strength class based on score
 		if (password.length === 0) {
 			passwordStrengthBar.style.width = "0";
 		} else if (strength <= 2) {
@@ -596,14 +618,10 @@ document.addEventListener("DOMContentLoaded", function () {
 			passwordStrengthBar.classList.add("very-strong");
 		}
 
-		// Check if all requirements are met
+		// Validate all requirements and password match
 		isValid =
 			hasLength && hasUppercase && hasLowercase && hasNumber && hasSpecial;
-
-		// Check if passwords match
 		const passwordsMatch = password === confirmPassword && password !== "";
-
-		// Enable/disable save button
 		savePasswordBtn.disabled = !(isValid && passwordsMatch);
 	}
 
@@ -641,15 +659,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		sections[0].classList.add("active");
 	}
 
-	// Load country phone codes
+	// Initialize Features
 	loadCountryPhoneCodes();
-
-	// Setup country change listener
 	setupCountryChangeListener();
-
-	// Setup contact form handler (replaces existing)
 	setupContactFormHandler();
-
-	// Initialize phone input (replaces existing)
 	initializePhoneInput();
 });

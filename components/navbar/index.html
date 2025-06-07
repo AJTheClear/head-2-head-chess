@@ -10,27 +10,27 @@
 </head>
 
 <body>
-
-    <!-- Navigation Bar -->
+    <!-- Main Navigation Bar -->
     <nav class="navbar">
-
-        <!-- Logo -->
+        <!-- Logo Section -->
         <div class="logo">
             <a href="/">H2H Chess</a>
         </div>
 
-        <!-- Right Side: Search and Profile -->
+        <!-- Right Side: User Profile and Dropdown Menu -->
         <div class="nav-right">
             <img src="../../assets/images/SungJinWoo_ProfilePic.png" class="user-pic" onclick="toggleMenu()">
 
-            <!-- Profile Dropdown -->
+            <!-- Profile Dropdown Menu -->
             <div class="sub-menu-wrap" id="subMenu">
                 <div class="sub-menu">
+                    <!-- User Profile Info Section -->
                     <div class="user-info">
                         <img src="../../assets/images/SungJinWoo_ProfilePic.png">
-                        <h3>Nick Georgiev</h3>
+                        <h3></h3>
                     </div>
                     <hr>
+                    <!-- Navigation Links -->
                     <a href="../../views/user-public-profile/index.html" class="sub-menu-link">
                         <img src="../../assets/images/profile.png">
                         <p>Profile</p>
@@ -46,17 +46,7 @@
                         <p>Help & Support</p>
                         <span>></span>
                     </a>
-
-                    <!-- Theme Toggle
-                    <div class="sub-menu-toggle">
-                        <img src="../../assets/images/night-mode.png">
-                        <p>Change Theme</p>
-                        <label class="toggle-switch">
-                            <input type="checkbox" class="theme-toggle">
-                            <span class="toggle-slider"></span>
-                        </label>
-                    </div> -->
-
+                    <!-- Logout Link -->
                     <a href="#" class="sub-menu-link logout-link logout" onclick="logout(); return false;">
                         <img src="../../assets/images/logout.png">
                         <p>Logout</p>
@@ -67,10 +57,10 @@
         </div>
     </nav>
 
-    <!-- Overlay for dimming -->
+    <!-- Overlay for dimming background when menu is open -->
     <div id="overlay" class="overlay"></div>
 
-    <!-- Add utility scripts before main script -->
+    <!-- Scripts -->
     <script src="../../utils/auth.js"></script>
     <script src="../../utils/theme.js"></script>
     <script src="script.js"></script>

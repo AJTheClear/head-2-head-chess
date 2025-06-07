@@ -1,9 +1,10 @@
+// DOM Elements
 const subMenu = document.getElementById("subMenu");
 const overlay = document.getElementById("overlay");
 
-// Check if authService exists
+// Authentication Service Fallback
+// Provides basic auth functionality if auth.js isn't loaded
 if (typeof window.authService === "undefined") {
-	// Create basic fallback functions if auth.js isn't loaded
 	window.authService = {
 		getCurrentUser: function () {
 			return JSON.parse(sessionStorage.getItem("currentUser"));
@@ -18,11 +19,11 @@ if (typeof window.authService === "undefined") {
 	};
 }
 
+// Initialize navbar state and event listeners
 updateNavbarForAuthState();
-// Add event listener for logout button
-const logoutLink = document.querySelector(
-	".sub-menu-link.logout-link.logout"
-);
+
+// Logout Button Event Listener
+const logoutLink = document.querySelector(".sub-menu-link.logout-link.logout");
 if (logoutLink) {
 	logoutLink.addEventListener("click", function (e) {
 		e.preventDefault();
@@ -30,8 +31,12 @@ if (logoutLink) {
 	});
 }
 
-
-// Update navbar based on authentication state
+/**
+ * Updates the navbar UI based on user authentication state
+ * - Shows/hides user information
+ * - Enables/disables profile links
+ * - Updates user display name
+ */
 function updateNavbarForAuthState() {
 	const userPic = document.querySelector(".user-pic");
 	const userInfo = document.querySelector(".user-info");
@@ -39,31 +44,28 @@ function updateNavbarForAuthState() {
 		".sub-menu-link:not(.logout-link)"
 	);
 
-	// Get current user
-	
 	const currentUser = authService.getCurrentUser();
 
 	if (authService.isLoggedIn()) {
-		// User is logged in
+		// Update UI for logged-in user
 		const userImage = userInfo.querySelector("img");
 		const userName = userInfo.querySelector("h3");
 
-		// Update user name
 		userName.textContent = `${currentUser.firstName} ${currentUser.lastName}`;
 
-		// Enable profile links
+		// Enable all profile navigation links
 		profileLinks.forEach((link) => {
 			link.classList.remove("disabled");
 			link.style.opacity = 1;
 			link.style.pointerEvents = "auto";
 		});
 	} else {
-		// User is not logged in
+		// Update UI for guest user
 		if (userInfo && userInfo.querySelector("h3")) {
 			userInfo.querySelector("h3").textContent = "Guest User";
 		}
 
-		// Disable profile links except logout
+		// Disable profile navigation links
 		profileLinks.forEach((link) => {
 			link.classList.add("disabled");
 			link.style.opacity = 0.5;
@@ -72,54 +74,59 @@ function updateNavbarForAuthState() {
 	}
 }
 
-// Get current user from session storage
+/**
+ * Retrieves the current user from session storage
+ * Falls back to direct session storage access if authService is unavailable
+ */
 function getCurrentUser() {
 	if (window.authService) {
 		return authService.getCurrentUser();
 	}
-
 	return JSON.parse(sessionStorage.getItem("currentUser"));
 }
 
-// Logout function
+/**
+ * Handles user logout
+ * Uses authService if available, otherwise falls back to basic logout
+ */
 function logout() {
 	console.log("Logout function called");
-	// Use authService if available
 	if (window.authService) {
 		authService.logout();
 	} else {
-		// Fallback
 		sessionStorage.removeItem("currentUser");
 		window.location.href = "../../views/login-page/index.html";
 	}
 }
 
-// ------ Toggle Functions ------
+// ------ Menu Interaction Functions ------
+
+/**
+ * Toggles the profile menu visibility and overlay
+ */
 function toggleMenu() {
 	const isOpen = subMenu.classList.toggle("open-menu");
 	overlay.classList.toggle("active", isOpen);
 }
 
+// Close menu when clicking outside
 window.addEventListener("click", (event) => {
-	// Check if we're clicking outside the profile menu
 	if (
 		!event.target.closest(".user-pic") &&
 		!event.target.closest(".sub-menu-wrap")
 	) {
 		subMenu.classList.remove("open-menu");
-		// Also remove the overlay/blur effect
 		overlay.classList.remove("active");
 	}
 });
 
-// Prevent inside clicks from closing menus
-
+// Prevent menu from closing when clicking inside
 const subMenuWrap = document.querySelector(".sub-menu-wrap");
 if (subMenuWrap) {
 	subMenuWrap.addEventListener("click", (e) => e.stopPropagation());
 }
 
-// Close on ESC key
+// Close menu on ESC key press
 window.addEventListener("keydown", (event) => {
 	if (event.key === "Escape") {
 		subMenu.classList.remove("open-menu");

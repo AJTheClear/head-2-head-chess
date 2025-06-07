@@ -1,35 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Game Lobby</title>
-  <link rel="stylesheet" href="/styles/global.css">
-  <link rel="stylesheet" href="/views/home-page/styles.css">
+    <meta charset="UTF-8">
+    <title>Game Lobby</title>
+    <!-- External Stylesheets -->
+    <link rel="stylesheet" href="/styles/global.css">
+    <link rel="stylesheet" href="/views/home-page/styles.css">
 </head>
+
 <body>
+    <!-- Dynamic Navbar Container -->
+    <div id="navbar-container"></div>
 
-  <div id="navbar-container"></div>
+    <!-- Welcome Section -->
+    <div class="page-content" style="padding: 100px; text-align: center;">
+        <h1>Welcome to H2H Chess</h1>
+        <p>Experience real-time head-to-head chess battles!</p>
+    </div>
 
-  <div class="page-content" style="padding: 100px; text-align: center;">
-    <h1>Welcome to H2H Chess</h1>
-    <p>Experience real-time head-to-head chess battles!</p>
-  </div>
+    <!-- Game Creation Controls -->
+    <div class="button-row">
+        <button id="createGameBtn">Create New Game</button>
+    </div>
 
-  <div class="button-row">
-    <button id="createGameBtn">Create New Game</button>
-  </div>
+    <!-- Game Joining Controls -->
+    <div class="input-group">
+        <label for="joinCodeInput">Join Game with Code:</label>
+        <input type="text" id="joinCodeInput" placeholder="Enter game code and press Enter">
+    </div>
 
-  <div class="input-group">
-    <label for="joinCodeInput">Join Game with Code:</label>
-    <input type="text" id="joinCodeInput" placeholder="Enter game code and press Enter">
-  </div>
+    <!-- Game Spectating Controls -->
+    <div class="input-group">
+        <label for="spectateCodeInput">Spectate Game:</label>
+        <input type="text" id="spectateCodeInput" placeholder="Enter game code and press Enter">
+    </div>
 
-  <div class="input-group">
-    <label for="spectateCodeInput">Spectate Game:</label>
-    <input type="text" id="spectateCodeInput" placeholder="Enter game code and press Enter">
-  </div>
-
-  <script src="/views/home-page/script.js"></script>
-  <script src="/utils/load-navbar.js"></script>
+    <!-- Component Scripts -->
+    <script src="/views/home-page/script.js"></script>
+    <script src="/utils/load-navbar.js"></script>
 </body>
+
 </html>

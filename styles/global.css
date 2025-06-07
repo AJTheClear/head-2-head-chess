@@ -23,13 +23,9 @@
     --shadow-light: rgba(0, 0, 0, 0.1);
 
     --color-bg-dark: #2b3645;
-    /* навбар тъмно-синьо */
     --color-bg-light: #fafafa;
-    /* светъл фон на секции */
     --color-text-primary: #333;
-    /* основен текст */
     --color-text-muted: #666;
-    /* второстепенен текст */
 }
 
 

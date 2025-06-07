@@ -1,3 +1,7 @@
+/**
+ * Main initialization function that runs when the DOM is loaded.
+ * Handles country data loading, event listeners setup, and initial data population.
+ */
 document.addEventListener("DOMContentLoaded", async () => {
 	// Load country data from JSON file
 	try {
@@ -29,28 +33,30 @@ document.addEventListener("DOMContentLoaded", async () => {
 	initializeFormValidation();
 
 	// Get user ID from sessionStorage
-	const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+	const currentUser = JSON.parse(sessionStorage.getItem("currentUser"));
 	const userId = currentUser ? currentUser.id : null;
 
 	// Load match history
 	function loadMatchHistory() {
 		if (!userId) {
-			console.error('No user ID found in sessionStorage');
+			console.error("No user ID found in sessionStorage");
 			return;
 		}
 
 		fetch(`/api/users/${userId}/matches`)
-			.then(response => response.json())
-			.then(data => {
+			.then((response) => response.json())
+			.then((data) => {
 				if (data.success) {
-					const matchHistory = document.querySelector('.match-history');
-					matchHistory.innerHTML = ''; // Clear existing matches
+					const matchHistory = document.querySelector(".match-history");
+					matchHistory.innerHTML = ""; // Clear existing matches
 
-					data.matches.forEach(match => {
-						const matchItem = document.createElement('div');
-						matchItem.className = 'match-item';
+					data.matches.forEach((match) => {
+						const matchItem = document.createElement("div");
+						matchItem.className = "match-item";
 						matchItem.innerHTML = `
-							<div class="match-result ${match.result}">${match.result.charAt(0).toUpperCase() + match.result.slice(1)}</div>
+							<div class="match-result ${match.result}">${
+							match.result.charAt(0).toUpperCase() + match.result.slice(1)
+						}</div>
 							<div class="match-opponent">${match.opponent}</div>
 							<div class="match-date">${match.date}</div>
 						`;
@@ -58,14 +64,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 					});
 				}
 			})
-			.catch(error => {
-				console.error('Error loading match history:', error);
+			.catch((error) => {
+				console.error("Error loading match history:", error);
 			});
 	}
 
 	loadMatchHistory();
 });
 
+/**
+ * Fallback authentication service if auth.js isn't loaded.
+ * Provides basic user management functionality.
+ */
 if (typeof window.authService === "undefined") {
 	// Create basic fallback functions if auth.js isn't loaded
 	window.authService = {
@@ -82,6 +92,9 @@ if (typeof window.authService === "undefined") {
 	};
 }
 
+/**
+ * Populate user profile data from session storage.
+ */
 const me = authService.getCurrentUser();
 if (me) {
 	// username
@@ -97,6 +110,10 @@ if (me) {
 	document.getElementById("elo-value").textContent = me.elo;
 }
 
+/**
+ * Populates the country select dropdown with country data.
+ * param countries - Array of country objects with name property
+ */
 function populateCountrySelect(countries) {
 	const countrySelect = document.getElementById("edit-country");
 	if (!countrySelect) return;
@@ -110,12 +127,15 @@ function populateCountrySelect(countries) {
 		option.value = country.name;
 		option.textContent = country.name;
 
-		option.defaultSelected = undefined
+		option.defaultSelected = undefined;
 		countrySelect.appendChild(option);
 	});
 }
 
-// Initialize all form validations
+/**
+ * Initializes all form validations for the profile edit form.
+ * Sets up validation for username and bio fields.
+ */
 function initializeFormValidation() {
 	// Initialize bio character counter and validation
 	initializeBioValidation();
@@ -126,6 +146,10 @@ function initializeFormValidation() {
 	// Add more validations as needed
 }
 
+/**
+ * Initializes username validation with real-time feedback.
+ * Creates and attaches validation message element.
+ */
 function initializeUsernameValidation() {
 	const usernameInput = document.getElementById("edit-username");
 	if (!usernameInput) return;
@@ -146,6 +170,12 @@ function initializeUsernameValidation() {
 	});
 }
 
+/**
+ * Validates username input against specific criteria.
+ * param input - The username input element
+ * param validationElement - Element to display validation messages
+ * returns Whether the username is valid
+ */
 function validateUsername(input, validationElement) {
 	const value = input.value.trim();
 	let isValid = true;
@@ -182,6 +212,10 @@ function validateUsername(input, validationElement) {
 	return isValid;
 }
 
+/**
+ * Initializes bio validation with character counter and validation messages.
+ * Sets up real-time character counting and validation feedback.
+ */
 function initializeBioValidation() {
 	const bioTextarea = document.getElementById("edit-bio");
 	if (!bioTextarea) return;
@@ -219,6 +253,12 @@ function initializeBioValidation() {
 	});
 }
 
+/**
+ * Updates the character counter display and applies visual styling.
+ * param textarea - The bio textarea element
+ * param counterElement - Element to display character count
+ * param maxLength - Maximum allowed characters
+ */
 function updateCharacterCount(textarea, counterElement, maxLength) {
 	const currentLength = textarea.value.length;
 
@@ -240,6 +280,13 @@ function updateCharacterCount(textarea, counterElement, maxLength) {
 	}
 }
 
+/**
+ * Validates bio content against specific criteria.
+ * param textarea - The bio textarea element
+ * param validationElement - Element to display validation messages
+ * param maxLength - Maximum allowed characters
+ * returns Whether the bio is valid
+ */
 function validateBio(textarea, validationElement, maxLength) {
 	const value = textarea.value.trim();
 	let isValid = true;
@@ -279,6 +326,10 @@ function validateBio(textarea, validationElement, maxLength) {
 	return isValid;
 }
 
+/**
+ * Sets up all event listeners for the profile page.
+ * Handles modal interactions, form submissions, and avatar uploads.
+ */
 async function setupEventListeners() {
 	// Edit profile button
 	const editProfileBtn = document.getElementById("edit-profile-btn");
@@ -383,7 +434,6 @@ async function setupEventListeners() {
 			const username = document.getElementById("edit-username").value.trim();
 			const bio = document.getElementById("edit-bio").value.trim();
 			const country = document.getElementById("edit-country").value;
-			
 
 			// Validate form
 			const usernameInput = document.getElementById("edit-username");
@@ -419,7 +469,7 @@ async function setupEventListeners() {
 			// Close the modal
 			editProfileModal.classList.remove("active");
 
-			authService.updateUserProfile({ username, bio, country })
+			authService.updateUserProfile({ username, bio, country });
 		});
 	}
 

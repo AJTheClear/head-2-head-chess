@@ -1,8 +1,16 @@
-// Handle login form submission
+/**
+ * Login Page Controller
+ * Handles form submission, validation, and authentication
+ */
 document.addEventListener("DOMContentLoaded", function () {
+	// DOM Elements
 	const loginForm = document.getElementById("login-form");
 
 	if (loginForm) {
+		/**
+		 * Form Submission Handler
+		 * Validates and processes login attempt
+		 */
 		loginForm.addEventListener("submit", function (event) {
 			event.preventDefault();
 
@@ -31,21 +39,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
 			if (isValid) {
 				// Attempt login
-				authService.login(username, password).then(result => {
+				authService.login(username, password).then((result) => {
 					if (result.success) {
 						// Redirect to home page
 						window.location.href = "/";
 					} else {
-						document.getElementById("password-error").textContent = result.error;
+						document.getElementById("password-error").textContent =
+							result.error;
 					}
 				});
 			}
 		});
 	}
 
-	// Check if user is already logged in
+	// Check authentication state
 	if (authService.isLoggedIn()) {
-		// Redirect to home page
+		// Redirect to home page if already logged in
 		window.location.href = "/";
 	}
 });

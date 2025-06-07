@@ -1,4 +1,12 @@
-// Load countries data
+/**
+ * Registration Page Script
+ * Handles user registration form validation, country selection, and form submission
+ */
+
+/**
+ * Loads the list of countries from JSON file
+ * returns Array of country objects
+ */
 async function loadCountries() {
 	try {
 		// Try to load from main location
@@ -21,7 +29,10 @@ async function loadCountries() {
 	}
 }
 
-// Populate country select dropdown
+/**
+ * Populates the country select dropdown with available countries
+ * Falls back to a predefined list if loading fails
+ */
 async function populateCountrySelect() {
 	const countrySelect = document.getElementById("country");
 	if (!countrySelect) return;
@@ -66,7 +77,10 @@ async function populateCountrySelect() {
 	}
 }
 
-// Validate registration form
+/**
+ * Validates all registration form fields
+ * returns Validation result and error messages
+ */
 function validateForm() {
 	let isValid = true;
 	const errors = {};
@@ -161,7 +175,7 @@ function validateForm() {
 	return { isValid, errors };
 }
 
-// Handle registration form submission
+// Initialize registration page
 document.addEventListener("DOMContentLoaded", function () {
 	// Populate the country dropdown
 	populateCountrySelect();

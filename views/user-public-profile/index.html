@@ -6,25 +6,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile - H2H Chess</title>
 
-    <!-- Stylesheets -->
+    <!-- External Stylesheets -->
     <link rel="stylesheet" href="../../styles/global.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-    <!-- Navbar container -->
+    <!-- Dynamic Navbar Container -->
     <div id="navbar-container"></div>
 
-    <!-- Profile Container -->
+    <!-- Main Profile Container -->
     <div class="profile-container">
+        <!-- Profile Header Section -->
         <div class="profile-header">
+            <!-- Avatar Section -->
             <div class="profile-avatar-container">
                 <img id="profile-avatar" src="../../assets/images/SungJinWoo_ProfilePic.png" alt="Profile Picture">
                 <div class="edit-avatar-overlay" id="edit-avatar-btn">
                     <img src="../../assets/images/change-avatar-icon.png" alt="Change Avatar">
                 </div>
             </div>
+            <!-- User Info Section -->
             <div class="profile-header-info">
                 <h1 id="username"></h1>
                 <div class="profile-meta">
@@ -38,21 +41,24 @@
                     </div>
                 </div>
             </div>
+            <!-- Profile Actions -->
             <div class="profile-actions">
                 <button id="edit-profile-btn" class="btn-primary">Edit Profile</button>
             </div>
         </div>
 
+        <!-- Profile Content Section -->
         <div class="profile-body">
+            <!-- Bio Section -->
             <div class="profile-section">
                 <h2>Short Bio</h2>
                 <p id="user-bio"></p>
             </div>
 
+            <!-- Match History Section -->
             <div class="profile-section">
                 <h2>Recent Matches</h2>
                 <div class="match-history">
-                    
                 </div>
             </div>
         </div>
@@ -64,22 +70,26 @@
             <span class="close-modal">&times;</span>
             <h2>Edit Profile</h2>
             <form id="edit-profile-form">
+                <!-- Username Field -->
                 <div class="form-group">
                     <label for="edit-username">Username</label>
-                    <input type="text" id="edit-username" name="username" style="color: var(--text-muted)" placeholder="Enter new username">
+                    <input type="text" id="edit-username" name="username" style="color: var(--text-muted)"
+                        placeholder="Enter new username">
                 </div>
+                <!-- Bio Field -->
                 <div class="form-group">
                     <label for="edit-bio">Short Bio</label>
-                    <textarea id="edit-bio" name="bio" rows="3" style="color: var(--text-muted)" placeholder="Enter new username"
-                        maxlength="100"></textarea>
-                    <!-- Character counter will be inserted here by JavaScript -->
+                    <textarea id="edit-bio" name="bio" rows="3" style="color: var(--text-muted)"
+                        placeholder="Enter new username" maxlength="100"></textarea>
                 </div>
+                <!-- Country Field -->
                 <div class="form-group">
                     <label for="edit-country">Country</label>
                     <select id="edit-country" name="country">
                         <!-- Will be populated from iso-countries.json -->
                     </select>
                 </div>
+                <!-- Form Actions -->
                 <div class="form-actions">
                     <button type="submit" class="btn-primary">Save Changes</button>
                     <button type="button" class="btn-secondary" id="cancel-edit">Cancel</button>
@@ -94,15 +104,18 @@
             <span class="close-modal">&times;</span>
             <h2>Change Profile Picture</h2>
             <div class="avatar-upload-container">
+                <!-- Avatar Preview -->
                 <div class="avatar-preview">
                     <img id="avatar-preview-img" src="../../assets/images/SungJinWoo_ProfilePic.png"
                         alt="Avatar Preview">
                 </div>
+                <!-- Upload Controls -->
                 <div class="avatar-upload-controls">
                     <label for="avatar-upload" class="btn-primary">Select Image</label>
                     <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
                     <p class="upload-info">Allowed: JPG, PNG. Max size: 2MB</p>
                 </div>
+                <!-- Upload Actions -->
                 <div class="avatar-upload-actions">
                     <button id="save-avatar" class="btn-primary" disabled>Save</button>
                     <button id="cancel-avatar" class="btn-secondary">Cancel</button>
@@ -111,7 +124,7 @@
         </div>
     </div>
 
-    <!-- Load Scripts -->
+    <!-- Component Scripts -->
     <script src="../../utils/auth.js"></script>
     <script src="/utils/load-navbar.js"></script>
     <script src="script.js"></script>
