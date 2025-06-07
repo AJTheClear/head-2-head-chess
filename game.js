@@ -7,6 +7,8 @@ export class Game {
       this.status = "waiting"; // waiting, playing, finished
       this.winner = null;
       this.endReason = null;
+      this.blackPlayerID = null;
+      this.whitePlayerID = null;
       
       // Initialize chess board with pieces
       this.board = {
@@ -22,7 +24,7 @@ export class Game {
       };
     }
   
-    addPlayer(socket, forcedRole = null) {
+    addPlayer(socket, forcedRole = null, userID) {
       if (forcedRole === "spectator") {
         this.players.push({ id: socket.id, socket, role: "spectator" });
         return "spectator";
@@ -37,7 +39,14 @@ export class Game {
   
       const role = realPlayersCount === 0 ? "white" : "black";
       this.players.push({ id: socket.id, socket, role });
-  
+      if (role === "white") {
+        this.whitePlayerID = userID;
+        console.log(this.whitePlayerID);
+      } else if (role === "black") {
+        this.blackPlayerID = userID;
+        console.log(this.blackPlayerID);
+      }
+
       if (realPlayersCount + 1 === 2) {
         this.status = "playing";
       }
@@ -137,7 +146,9 @@ export class Game {
         moves: this.moves,
         board: this.board,
         winner: this.winner,
-        endReason: this.endReason
+        endReason: this.endReason,
+        blackPlayerID: this.blackPlayerID,
+        whitePlayerID: this.whitePlayerID,
       };
     }
 }

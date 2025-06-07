@@ -16,12 +16,20 @@ const socket = io();
 // Get gameId from URL and store it globally
 window.gameId = window.location.pathname.split("/")[1];
 const gameIdDisplay = document.getElementById('gameIdDisplay');
+
 gameIdDisplay.textContent = window.gameId;
+
+const user = JSON.parse(sessionStorage.getItem('currentUser'));
+const userId = user ? user.id : null;
+
 const isSpectator = new URLSearchParams(window.location.search).get('spectate') === 'true';
 
-socket.emit('joinGame', { gameId: window.gameId, isSpectator });
+socket.emit('joinGame', {
+    gameId: window.gameId,
+    isSpectator: isSpectator,
+    userId: userId
+});
 
-// Get audio element
 const moveSound = document.getElementById('moveSound');
 
 function getLegalMovesRaw(pos, state = window.currentGameState.board, skipKingCheck = false) {
@@ -409,10 +417,10 @@ socket.on('gameStateUpdate', (gameState) => {
     });
   } else if (isStalemate(currentPlayer)) {
     messageBox.value += "Stalemate! It's a draw.\n";
-    socket.emit('gameEnded', { gameId: window.gameId, reason: 'stalemate' });
+    socket.emit('gameEnded', { gameId: window.gameId, reason: 'stalemate', winner: 'white' });
   } else if (isInsufficientMaterial()) {
     messageBox.value += "Draw due to insufficient material.\n";
-    socket.emit('gameEnded', { gameId: window.gameId, reason: 'insufficient_material' });
+    socket.emit('gameEnded', { gameId: window.gameId, reason: 'insufficient_material', winner: 'white' });
   } else if (isKingInCheck(currentPlayer)) {
     messageBox.value += "Check!\n";
   }
@@ -433,10 +441,8 @@ socket.on('gameEnded', (data) => {
   const messageBox = document.getElementById("messageBox");
   messageBox.value += `Game ended: ${data.reason}\n`;
 
-  //db call
-
   setTimeout(() => {
-    window.location.href = '/';
+      window.location.href = '/';
   }, 8000);
 });
 

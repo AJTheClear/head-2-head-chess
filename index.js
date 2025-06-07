@@ -42,7 +42,7 @@ app.use('/api/users', userRouter);
 io.on('connection', (socket) => {
     console.log('New client connected');
   
-    socket.on('joinGame', ({ gameId, isSpectator }) => {
+    socket.on('joinGame', ({ gameId, isSpectator, userId }) => {
       socket.join(gameId);
       
       if (!games.has(gameId)) {
@@ -50,7 +50,7 @@ io.on('connection', (socket) => {
       }
       
       const game = games.get(gameId);
-      const role = game.addPlayer(socket, isSpectator ? "spectator" : null);
+      const role = game.addPlayer(socket, isSpectator ? "spectator" : null, userId);
       
       const gameState = game.getGameState();
       io.to(gameId).emit('gameStateUpdate', gameState);
@@ -90,6 +90,49 @@ io.on('connection', (socket) => {
       game.endReason = reason;
 
       const gameState = game.getGameState();
+      
+      // Get the winner's socket ID
+      const winnerSocketId = winner === 'white' ? 
+          game.players.find(p => p.role === 'white')?.id :
+          game.players.find(p => p.role === 'black')?.id;
+
+      // Only save if this socket is the winner
+      if (socket.id === winnerSocketId) {
+          // Check if game is already saved
+          db('games').where('game_id', gameId).first()
+              .then(existingGame => {
+                  if (existingGame) {
+                      console.log('Game already saved, skipping...');
+                      return;
+                  }
+
+                  // Determine state based on reason
+                  let state;
+                  if (reason === 'checkmate') {
+                      state = winner; // 'white' or 'black'
+                  } else if (reason === 'stalemate' || reason === 'insufficient_material') {
+                      state = reason;
+                  }
+
+                  // Save game to database
+                  return db('games').insert({
+                      game_id: gameId,
+                      player_id_white: gameState.whitePlayerID,
+                      player_id_black: gameState.blackPlayerID,
+                      result: reason,
+                      state: state,
+                      moves: JSON.stringify(gameState.moves),
+                      date_time_played: new Date()
+                  });
+              })
+              .then(() => {
+                  console.log('Game successfully saved by winner');
+              })
+              .catch(error => {
+                  console.error('Save game error:', error);
+              });
+      }
+
       io.to(gameId).emit('gameStateUpdate', gameState);
       io.to(gameId).emit('gameEnded', { reason, winner });
     });
@@ -100,10 +143,52 @@ io.on('connection', (socket) => {
       for (const [gameId, game] of games.entries()) {
         if (game.removePlayer(socket.id)) {
           const gameState = game.getGameState();
+          
+          // Set winner if game was in progress
+          if (game.status === "finished") {
+            const remainingPlayer = game.players.find(p => p.role !== "spectator");
+            if (remainingPlayer) {
+              game.winner = remainingPlayer.role;
+              game.endReason = "opponent left";
+
+              // Get the winner's socket ID
+              const winnerSocketId = remainingPlayer.id;
+
+              // Save game to database
+              db('games').where('game_id', gameId).first()
+                .then(existingGame => {
+                  if (existingGame) {
+                    console.log('Game already saved, skipping...');
+                    return;
+                  }
+
+                  // Save game to database
+                  return db('games').insert({
+                    game_id: gameId,
+                    player_id_white: gameState.whitePlayerID,
+                    player_id_black: gameState.blackPlayerID,
+                    result: "opponent left",
+                    state: remainingPlayer.role, // Winner's role as state
+                    moves: JSON.stringify(gameState.moves),
+                    date_time_played: new Date()
+                  });
+                })
+                .then(() => {
+                  console.log('Game successfully saved after opponent left');
+                })
+                .catch(error => {
+                  console.error('Save game error:', error);
+                });
+            }
+          }
+          
           io.to(gameId).emit('gameStateUpdate', gameState);
           
           if (game.status === "finished") {
-            io.to(gameId).emit('gameEnded', { reason: 'player_left' });
+            io.to(gameId).emit('gameEnded', { 
+              reason: 'opponent left',
+              winner: game.winner
+            });
           }
           
           if (game.players.length === 0) {

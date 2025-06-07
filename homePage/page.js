@@ -4,20 +4,30 @@ document.addEventListener("DOMContentLoaded", () => {
   const spectateCodeInput = document.getElementById("spectateCodeInput");
 
   createGameBtn?.addEventListener("click", () => {
-    fetch("/", {
-      method: "POST",
-    }).then((res) => {
-      if (res.redirected) {
-        window.location.href = res.url;
-      }
-    });
+
+    const user = JSON.parse(sessionStorage.getItem('currentUser'));
+    const userId = user ? user.id : null;
+    console.log(userId);
+    if (userId) {
+      fetch("/", {
+        method: "POST",
+      }).then((res) => {
+        if (res.redirected) {
+          window.location.href = res.url;
+        }
+      });
+    }
   });
 
   joinCodeInput?.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
-      const code = joinCodeInput.value.trim();
-      if (code !== "") {
-        window.location.href = `/${code}`;
+      const user = JSON.parse(sessionStorage.getItem('currentUser'));
+      const userId = user ? user.id : null;
+      if (userId) {
+        const code = joinCodeInput.value.trim();
+        if (code !== "") {
+          window.location.href = `/${code}`;
+        }
       }
     }
   });

@@ -128,6 +128,45 @@ router.post('/login', async (req, res) => {
 	}
 });
 
+router.post('/games', async (req, res) => {
+    console.log('POST /api/users/games - Received request');
+    console.log('Body:', req.body);
+    
+    try {
+        const { 
+            gameId,
+            whitePlayerId, 
+            blackPlayerId, 
+            result,
+            state,
+            moves
+        } = req.body;
+
+        // Записваме играта
+        const game = await db('games').insert({
+            game_id: gameId,
+            player_id_white: whitePlayerId,
+            player_id_black: blackPlayerId,
+            result: result,
+            state: state,
+            moves: JSON.stringify(moves),
+            date_time_played: new Date()
+        }).returning('*');
+
+        res.json({
+            success: true,
+            game: game[0]
+        });
+        console.log('Game successfully saved');
+    } catch (error) {
+        console.error('Save game error:', error);
+        res.status(500).json({
+            success: false,
+            error: "Възникна грешка при записване на играта"
+        });
+    }
+});
+
 router.post('/:id', async (req, res) => {
     console.log('PUT /api/users/:id - Received request');
     console.log('Params:', req.params);
