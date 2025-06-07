@@ -4,12 +4,16 @@ import bcrypt from 'bcrypt';
 
 const router = express.Router();
 
-// POST /api/users - registering new user
+/**
+ * POST /api/users
+ * Register a new user
+ */
 router.post('/', async (req, res) => {
     console.log('Received registration request:', req.body);
     try {
         const { firstName, lastName, email, username, country, password } = req.body;
 
+        // Check if user already exists with the same email or username
         const existingUser = await db('users')
             .where({ email })
             .orWhere({ username })
@@ -24,7 +28,7 @@ router.post('/', async (req, res) => {
             });
         }
 
-        // hashing the password
+        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // creating new user
@@ -52,7 +56,10 @@ router.post('/', async (req, res) => {
     }
 });
 
-// GET /api/users - returns all users
+/**
+ * GET /api/users
+ * Get all users' public information
+ */
 router.get('/', async (req, res) => {
     try {
         const users = await db('users').select('id', 'username', 'email', 'elo');
@@ -63,7 +70,10 @@ router.get('/', async (req, res) => {
     }
 });
 
-// GET /api/users/:id - returns a specific user
+/**
+ * GET /api/users/:id
+ * Get specific user by ID
+ */
 router.get('/:id', async (req, res) => {
     try {
         const user = await db('users')
@@ -82,9 +92,13 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+/**
+ * POST /api/users/login
+ * Authenticate user login
+ */
 router.post('/login', async (req, res) => {
-	try {
-		const { username, password } = req.body;
+    try {
+        const { username, password } = req.body;
 
 		// check if user exists
 		const user = await db('users')
@@ -92,41 +106,45 @@ router.post('/login', async (req, res) => {
 			.orWhere('email', username)
 			.first();
 
-		if (!user) {
+        if (!user) {
             console.log(user)
-			return res.status(401).json({
-				success: false,
-				error: "User does not exist"
-			});
-		}
+            return res.status(401).json({
+                success: false,
+                error: "User does not exist"
+            });
+        }
 
-		// check password
-		const isPasswordValid = await bcrypt.compare(password, user.password);
-		if (!isPasswordValid) {
-			console.log('Invalid password for user:', user.username);
-			return res.status(401).json({
-				success: false,
-				error: "Wrong password"
-			});
-		}
+        // Verify password
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            console.log('Invalid password for user:', user.username);
+            return res.status(401).json({
+                success: false,
+                error: "Wrong password"
+            });
+        }
 
-		// Don't sent the user back their password
-		const { password: _, ...userWithoutPassword } = user;
+        // Remove password from response
+        const { password: _, ...userWithoutPassword } = user;
         console.log(user)
 
-		res.json({
-			success: true,
-			user: userWithoutPassword
-		});
-	} catch (error) {
-		console.error('Login error:', error);
-		res.status(500).json({
-			success: false,
-			error: "Error logging in"
-		});
-	}
+        res.json({
+            success: true,
+            user: userWithoutPassword
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        res.status(500).json({
+            success: false,
+            error: "Error logging in"
+        });
+    }
 });
 
+/**
+ * POST /api/users/games
+ * Save a completed game
+ */
 router.post('/games', async (req, res) => {
     console.log('POST /api/users/games - Received request');
     console.log('Body:', req.body);
@@ -141,7 +159,7 @@ router.post('/games', async (req, res) => {
             moves
         } = req.body;
 
-        // saving game
+        // Save game to database
         const game = await db('games').insert({
             game_id: gameId,
             player_id_white: whitePlayerId,
@@ -166,6 +184,10 @@ router.post('/games', async (req, res) => {
     }
 });
 
+/**
+ * POST /api/users/:id
+ * Update user profile information
+ */
 router.post('/:id', async (req, res) => {
     console.log('PUT /api/users/:id - Received request');
     console.log('Params:', req.params);
@@ -227,6 +249,10 @@ router.post('/:id', async (req, res) => {
     }
 });
 
+/**
+ * POST /api/users/:id/contact
+ * Update user contact information
+ */
 router.post('/:id/contact', async (req, res) => {
     console.log('POST /api/users/:id/contact - Received request');
     console.log('Params:', req.params);
@@ -287,6 +313,10 @@ router.post('/:id/contact', async (req, res) => {
     }
 });
 
+/**
+ * POST /api/users/:id/names
+ * Update user's name information
+ */
 router.post('/:id/names', async (req, res) => {
     console.log('POST /api/users/:id/names - Received request');
     console.log('Params:', req.params);
@@ -333,6 +363,10 @@ router.post('/:id/names', async (req, res) => {
     }
 });
 
+/**
+ * POST /api/users/:id/password
+ * Update user's password
+ */
 router.post('/:id/password', async (req, res) => {
     console.log('POST /api/users/:id/password - Received request');
     
@@ -358,7 +392,7 @@ router.post('/:id/password', async (req, res) => {
             });
         }
 
-        // Hash new password
+        // Hash and update new password
         const hashedPassword = await bcrypt.hash(newPassword, 10);
 
         // Update password and last changed date
@@ -383,6 +417,10 @@ router.post('/:id/password', async (req, res) => {
     }
 });
 
+/**
+ * GET /api/users/:id/matches
+ * Get user's recent match history
+ */
 router.get('/:id/matches', async (req, res) => {
     console.log('GET /api/users/:id/matches - Received request');
     try {
@@ -402,7 +440,7 @@ router.get('/:id/matches', async (req, res) => {
             .orderBy('date_time_played', 'desc')
             .limit(3);
 
-        console.log('Matches found:', matches); // Debug log
+        console.log('Matches found:', matches);
 
         // Format matches for frontend
         const formattedMatches = matches.map(match => {
