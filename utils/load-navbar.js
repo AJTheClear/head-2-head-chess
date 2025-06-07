@@ -1,6 +1,12 @@
+/**
+ * Navbar Loader Utility
+ * Dynamically loads the navigation bar component into the page
+ * Includes HTML, CSS, and JavaScript dependencies
+ */
+
 document.addEventListener("DOMContentLoaded", async () => {
 	try {
-		// Load the HTML content of the Navbar
+		// Fetch navbar HTML template from components directory
 		const response = await fetch("/components/navbar/index.html");
 		if (!response.ok) {
 			throw new Error("Failed to fetch navbar");
@@ -9,9 +15,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 		const navbarContainer = document.getElementById("navbar-container");
 
 		if (navbarContainer) {
+			// Insert navbar HTML into the container
 			navbarContainer.innerHTML = navbarHTML;
 
-			// Dynamically load styles
+			// Load navbar styles if not already loaded
 			if (!document.querySelector('link[href*="navbar/styles.css"]')) {
 				const navbarCSS = document.createElement("link");
 				navbarCSS.rel = "stylesheet";
@@ -19,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 				document.head.appendChild(navbarCSS);
 			}
 
-			// Dynamically load script
+			// Load navbar script if not already loaded
 			if (!document.querySelector('script[src*="navbar/script.js"]')) {
 				const navbarScript = document.createElement("script");
 				navbarScript.src = "/components/navbar/script.js";
@@ -32,7 +39,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 	} catch (error) {
 		console.error("Error loading navbar:", error);
 
-		// Fallback: try loading navbar directly
+		// Fallback navbar implementation
+		// Used when the main navbar fails to load
 		try {
 			document.getElementById("navbar-container").innerHTML = `
 				<nav class="navbar">

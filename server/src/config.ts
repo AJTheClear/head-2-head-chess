@@ -1,6 +1,5 @@
 import 'dotenv/config'
 import convict from 'convict'
-//var convict = require('convict');
 
 export const config = convict({
   database: {
