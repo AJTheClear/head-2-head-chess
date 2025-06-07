@@ -1,4 +1,6 @@
-/* Account Settings Specific Styles */
+/* Account Settings Styles */
+
+/* Base Container */
 .account-container {
     max-width: 1000px;
     margin: 40px auto;
@@ -19,7 +21,7 @@
     overflow: hidden;
 }
 
-/* Sidebar Styles */
+/* Navigation Sidebar */
 .account-sidebar {
     min-width: 250px;
     background-color: var(--color-primary);
@@ -72,7 +74,7 @@
     width: 100%;
 }
 
-/* Section Styles */
+/* Section Content */
 .account-sections {
     flex: 1;
     padding: 30px;
@@ -134,7 +136,7 @@
     margin-bottom: 20px;
 }
 
-/* Information Display Styles */
+/* Information Display */
 .info-row {
     display: flex;
     margin-bottom: 16px;
@@ -163,7 +165,7 @@
     color: #555;
 }
 
-/* Form Styles */
+/* Form Elements */
 .edit-mode {
     background-color: #f9fafb;
     padding: 20px;
@@ -314,7 +316,7 @@
     color: #22c55e;
 }
 
-/* Modal Styles */
+/* Modal Components */
 .modal {
     display: none;
     position: fixed;
@@ -375,7 +377,7 @@
     height: 64px;
 }
 
-/* New sections styles */
+/* Theme and Preferences */
 .toggle-switch {
     position: relative;
     display: inline-block;
@@ -501,7 +503,7 @@ input:checked+.toggle-slider:before {
     display: flex;
 }
 
-/* Responsive styles */
+/* Responsive Design */
 @media (max-width: 768px) {
     .account-content {
         flex-direction: column;
@@ -548,9 +550,8 @@ input:checked+.toggle-slider:before {
     }
 }
 
-/* ─── H2H Theme Hints ───────────────────────────────────────────────── */
-
-/* 1) Give the white box a yellow accent stripe */
+/* H2H Theme System */
+/* 1) Container accent stripe */
 .login-box {
     position: relative;
     overflow: hidden;
@@ -567,7 +568,7 @@ input:checked+.toggle-slider:before {
     /* same yellow as navbar */
 }
 
-/* 2) Pull your header into the nav-blue family */
+/* 2) Header color scheme */
 .login-header h1 {
     color: #fff;
     /* white on dark */
@@ -577,7 +578,7 @@ input:checked+.toggle-slider:before {
     border-radius: 4px 4px 0 0;
 }
 
-/* 3) Make the “Sign In” button text match your dark nav */
+/* 3) Primary button styling */
 .btn-primary {
     background-color: #f0b90b;
     /* leave yellow bg */
@@ -589,26 +590,25 @@ input:checked+.toggle-slider:before {
     background-color: #d9a400;
 }
 
-/* 4) Footer link accents */
+/* 4) Footer link styling */
 .login-footer a {
     color: #f0b90b;
 }
 
-/* ─── H2H Theme Overrides for Account Settings ─────────────────────────── */
-
-/* 1) Акцентът (yellow) вместо синьото */
+/* H2H Theme Overrides */
+/* 1) Navigation active state */
 .account-nav-item.active,
 .account-nav-item:hover {
     color: var(--highlight-color);
     border-left-color: var(--highlight-color);
 }
 
-/* 2) Подчертаване на секциите в accent */
+/* 2) Section header accent */
 .section-header h2:after {
     background-color: var(--highlight-color);
 }
 
-/* 3) Бутони в синхрон с navbar: primary = yellow text тъмно-син, secondary – лек 3D-hover */
+/* 3) Button synchronization with navbar */
 .btn-primary {
     background-color: var(--highlight-color);
     color: var(--navbar-bg) !important;
@@ -631,7 +631,7 @@ input:checked+.toggle-slider:before {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* 4) Леко увеличаване на основните заглавия и текстове, динамично */
+/* 4) Dynamic text sizing */
 .section-header h2 {
     font-size: clamp(1.25rem, 2vw, 1.75rem);
 }
@@ -641,48 +641,35 @@ input:checked+.toggle-slider:before {
     font-size: clamp(0.9rem, 1.5vw, 1.1rem);
 }
 
-/* 5) Добавяме subtle yellow box-shadow на container-a */
+/* 5) Container shadow effect */
 .account-content {
     box-shadow: 0 2px 12px rgba(240, 185, 11, 0.15);
 }
 
-/* 6) При hover на sidebar items леко индикационно движение
-.account-nav-item {
-    transition: padding-left 0.2s ease, background-color 0.2s ease;
-}
-
-.account-nav-item:hover {
-    color: #fff !important;
-    padding-left: 28px;
-} */
-
-/* ───────────────────────────────────────────────────────────────────────── */
-
-/* текст и hover в табовете */
+/* Navigation Tab Styling */
 .account-nav-item {
     color: #e0e0e0;
-    /* по-светъл от чисто бяло */
+    /* lighter than pure white */
     transition: color 0.2s ease, background-color 0.2s ease;
 }
 
 .account-nav-item:hover {
     background-color: rgba(240, 185, 11, 0.1);
-    /* лек жълт акцент при hover */
+    /* yellow accent on hover */
     color: #f0b90b;
     /* navbar yellow */
 }
 
 .account-nav-item.active {
     background-color: rgba(240, 185, 11, 0.2);
-    /* по-наситен жълт фон */
+    /* more saturated yellow background */
     color: #fff !important;
     border-left-color: #f0b90b;
     /* accent stripe */
 }
 
-/* ─── Confirmation modal buttons ───────────────────────────────────────── */
-
-/* “Yes, save changes” (confirm) – hover в зелено */
+/* Modal Button States */
+/* Confirm button hover state */
 #confirm-button.btn-primary:hover {
     background-color: #10b981 !important;
     /* green */
@@ -690,7 +677,7 @@ input:checked+.toggle-slider:before {
     color: #fff !important;
 }
 
-/* “Cancel” – hover в червено */
+/* Cancel button hover state */
 #cancel-button.btn-secondary:hover {
     background-color: #ef4444 !important;
     /* red */
@@ -698,24 +685,20 @@ input:checked+.toggle-slider:before {
     color: #fff !important;
 }
 
-/* ─── Success modal title ──────────────────────────────────────────────── */
-
-/* правим заглавието “Success” (или “Changes Saved”) зелено и bold */
+/* Success Modal Styling */
 #success-modal .modal-content>h2:first-of-type {
     color: #10b981;
     /* green */
     font-weight: 700;
 }
 
-/* override за активния таб да е с бял текст */
+/* Active tab override */
 .account-nav-item.active {
     color: #fff !important;
-    /* останалите свойства остават както са */
+    /* remaining properties stay as is */
 }
 
-/* ─── Phone Country Code ──────────────────────────────────────────────── */
-
-/* Phone Input Container Styles */
+/* Phone Input Styling */
 .phone-input-container {
     display: flex;
     gap: 0;
@@ -776,7 +759,7 @@ input:checked+.toggle-slider:before {
     font-style: italic;
 }
 
-/* Responsive adjustments */
+/* Responsive Design */
 @media (max-width: 768px) {
     .country-code-input {
         width: 70px !important;
