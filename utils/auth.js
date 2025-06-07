@@ -1,54 +1,5 @@
-/**
- * Authentication Utility
- *
- * This file provides authentication-related functionality to be shared
- * across login, registration, and other pages that need authentication.
- */
-
 class AuthService {
-	// constructor() {
-	// 	// Simulate database with localStorage
-	// 	this.initializeUserDatabase();
-	// }
-
-	// Initialize user database with default users if none exist
-	// initializeUserDatabase() {
-	// 	if (!localStorage.getItem("userDatabase")) {
-	// 		const defaultUsers = [
-	// 			{
-	// 				username: "admin",
-	// 				email: "admin@h2hchess.com",
-	// 				password: "admin123",
-	// 				firstName: "Admin",
-	// 				lastName: "User",
-	// 				country: "Bulgaria",
-	// 				elo: 2000,
-	// 			},
-	// 			{
-	// 				username: "nick",
-	// 				email: "nick.georgiev@example.com",
-	// 				password: "chess123",
-	// 				firstName: "Nick",
-	// 				middleName: "Svetoslavov",
-	// 				lastName: "Georgiev",
-	// 				country: "Bulgaria",
-	// 				elo: 1850,
-	// 			},
-	// 		];
-	// 		localStorage.setItem("userDatabase", JSON.stringify(defaultUsers));
-	// 	}
-	// }
-
-	// Get user database
-	// getUserDatabase() {
-	// 	return JSON.parse(localStorage.getItem("userDatabase")) || [];
-	// }
-
-	// Save user database
-	// saveUserDatabase(database) {
-	// 	localStorage.setItem("userDatabase", JSON.stringify(database));
-	// }
-
+	
 	// Login user
 	async login(username, password) {
 		try {
@@ -61,11 +12,10 @@ class AuthService {
 			});
 
 			const data = await response.json();
-			console.log(data)
 			if (!response.ok) {
 				return {
 					success: false,
-					error: data.error || "Невалидни данни за вход"
+					error: data.error || "Invalid login credentials"
 				};
 			}
 
@@ -73,10 +23,9 @@ class AuthService {
 			this.setCurrentUser(data.user);
 			return { success: true, user: data.user };
 		} catch (error) {
-			console.error('Login error:', error);
 			return {
 				success: false,
-				error: "Възникна грешка при влизането"
+				error: "An error occurred during login"
 			};
 		}
 	}
@@ -111,7 +60,7 @@ class AuthService {
 			return {
 				success: false,
 				errors: {
-					general: 'Възникна грешка при регистрацията'
+					general: 'An error occurred during registration'
 				}
 			};
 		}
@@ -120,9 +69,7 @@ class AuthService {
 
 	// Update user profile
 	async updateUserProfile(userData) {
-		console.log('Received userData:', userData);
 		const currentUser = this.getCurrentUser();
-		console.log('Current user:', currentUser);
 
 		if (!currentUser) {
 			return { success: false, error: "Not logged in" };
@@ -131,17 +78,10 @@ class AuthService {
 		// Validate userData
 		if (!userData || typeof userData !== 'object') {
 			console.error('Invalid userData:', userData);
-			return { success: false, error: "Невалидни данни за профила" };
+			return { success: false, error: "Invalid profile data" };
 		}
 
 		try {
-			console.log('Sending request to:', `/api/users/${currentUser.id}`);
-			console.log('Request data:', {
-				username: userData.username,
-				bio: userData.bio,
-				country: userData.country
-			});
-
 			const response = await fetch(`/api/users/${currentUser.id}`, {
 				method: 'POST',
 				headers: {
@@ -154,56 +94,21 @@ class AuthService {
 				})
 			});
 
-			console.log('Response status:', response.status);
 			if (!response.ok) {
 				const data = await response.json();
-				console.log('Error response:', data);
 				return { success: false, error: data.error};
 			}
 
 			const data = await response.json();
-			console.log('Success response:', data);
 			// Update current user in session
 			this.setCurrentUser(data.user);
 			return { success: true, user: data.user };
 		} catch (error) {
-			console.error('Profile update error:', error);
 			return {
 				success: false,
-				error: "Възникна грешка при обновяване на профила"
+				error: "An error occurred while updating the profile"
 			};
 		}
-	}
-
-	// Change password
-	changePassword(currentPassword, newPassword) {
-		const currentUser = this.getCurrentUser();
-
-		if (!currentUser) {
-			return { success: false, error: "Not logged in" };
-		}
-
-		const userDatabase = this.getUserDatabase();
-		const userIndex = userDatabase.findIndex(
-			(user) => user.username === currentUser.username
-		);
-
-		if (userIndex === -1) {
-			return { success: false, error: "User not found" };
-		}
-
-		// Verify current password
-		if (userDatabase[userIndex].password !== currentPassword) {
-			return { success: false, error: "Current password is incorrect" };
-		}
-
-		// Update password
-		userDatabase[userIndex].password = newPassword;
-
-		// Save updated database
-		this.saveUserDatabase(userDatabase);
-
-		return { success: true };
 	}
 
 	// Set current user
@@ -227,12 +132,6 @@ class AuthService {
 	logout() {
 		sessionStorage.removeItem("currentUser");
 	}
-
-	// Get user by username
-	getUserByUsername(username) {
-		const userDatabase = this.getUserDatabase();
-		return userDatabase.find((user) => user.username === username);
-	}
 }
 
 function validateUserData(userData) {
@@ -240,33 +139,33 @@ function validateUserData(userData) {
 
 	// Validate first name
 	if (!userData.firstName || userData.firstName.trim().length < 2) {
-		errors.firstName = "Името трябва да е поне 2 символа";
+		errors.firstName = "First name must be at least 2 characters";
 	}
 
 	// Validate last name
 	if (!userData.lastName || userData.lastName.trim().length < 2) {
-		errors.lastName = "Фамилията трябва да е поне 2 символа";
+		errors.lastName = "Last name must be at least 2 characters";
 	}
 
 	// Validate email
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 	if (!userData.email || !emailRegex.test(userData.email)) {
-		errors.email = "Моля, въведете валиден имейл адрес";
+		errors.email = "Please enter a valid email address";
 	}
 
 	// Validate username
 	if (!userData.username || userData.username.trim().length < 3) {
-		errors.username = "Потребителското име трябва да е поне 3 символа";
+		errors.username = "Username must be at least 3 characters";
 	}
 
 	// Validate country
 	if (!userData.country) {
-		errors.country = "Моля, изберете държава";
+		errors.country = "Please select a country";
 	}
 
 	// Validate password
 	if (!userData.password || userData.password.length < 6) {
-		errors.password = "Паролата трябва да е поне 6 символа";
+		errors.password = "Password must be at least 6 characters";
 	}
 
 	return {

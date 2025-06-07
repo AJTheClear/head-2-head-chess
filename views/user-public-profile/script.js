@@ -419,7 +419,6 @@ async function setupEventListeners() {
 			// Close the modal
 			editProfileModal.classList.remove("active");
 
-			//db and session
 			authService.updateUserProfile({ username, bio, country })
 		});
 	}

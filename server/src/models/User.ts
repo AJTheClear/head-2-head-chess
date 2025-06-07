@@ -1,6 +1,4 @@
-import { Model } from "objection";
 import { BaseModel } from "./BaseModel";
-import { Game } from "./Game"
 
 export class User extends BaseModel {
 

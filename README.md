@@ -1,54 +1,107 @@
-# Head 2 Head Chess - networking
+# Head 2 Head Chess
 
-This is homework 4 part of the Head 2 Head project for the course WebTech at FMI
+A real-time multiplayer chess game built with Node.js and Socket.IO.
 
-## Технологии
+## Technologies
 
 - Node.js
 - Express.js
 - Socket.IO
 - HTML/CSS/JavaScript
+- Knex.js (SQL Query Builder)
+- PostgreSQL
 
-## Инсталация
+## Installation
 
-1. Клонирайте репото:
+1. Clone the repository:
 ```bash
-git clone [URL на репото]
+git clone [repository URL]
 ```
 
-2. Инсталирайте зависимостите:
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-3. Стартирайте сървъра:
+3. Set up the database:
 ```bash
-node index.js
+npm run migrate
 ```
 
-Сървърът ще стартира на порт 3001.
-
-## Структура на проекта
-
-```
-chess-networking/
-├── index.js           # Основен сървърен файл
-├── game.js            # Логика на играта
-├── homePage/          # Начална страница
-├── gamePage/          # Страница на играта
-└── routes/            # Маршрути на Express
+4. Start the server:
+```bash
+node --loader ts-node/esm index.js
 ```
 
-## Как да играете
+The server will start on port 3001.
 
-1. Отворете браузър и навигирайте до `http://localhost:3001`
-2. Създайте нова игра или се присъединете към съществуваща
-3. Изчакайте втори играч да се присъедини
-4. Започнете да играете!
+## Project Structure
 
-## Правила на играта
+```
+head-2-head-chess/
+├── index.js              # Main server file
+├── knexfile.ts           # Database configuration
+├── tsconfig.json         # TypeScript configuration
+├── assets/              # Static assets
+│   ├── audio/          # Sound effects
+│   ├── images/         # General images
+│   └── pieces/         # Chess piece images
+├── components/          # Reusable components
+│   └── navbar/         # Navigation bar component
+├── migrations/          # Database migrations
+├── routes/             # Express routes
+├── server/             # Server-side code
+├── styles/             # CSS styles
+├── utils/              # Utility functions
+│   └── game.js         # Game logic
+└── views/              # Frontend views
+    ├── home-page/      # Home page
+    └── game-page/      # Game page
+```
 
-- Първият играч получава белите фигури
-- Вторият играч получава черните фигури
-- Играчите се редуват да правят ходове
-- Наблюдателите могат само да гледат играта
+## Features
+
+- Real-time multiplayer chess
+- User authentication
+- Spectator mode
+- User profiles
+- Match history
+
+## How to Play
+
+1. Open your browser and navigate to `http://localhost:3001`
+2. Create a new game or join an existing one
+3. Wait for a second player to join
+4. Start playing!
+
+## Game Rules
+
+- First player gets white pieces
+- Second player gets black pieces
+- Players take turns making moves
+- Spectators can only watch the game
+- Standard chess rules apply
+
+## API Endpoints
+
+### User Routes
+- `POST /api/users` - Register new user
+- `POST /api/users/login` - User login
+- `GET /api/users/:id` - Get user profile
+- `POST /api/users/:id` - Update user profile
+- `POST /api/users/:id/contact` - Update contact info
+- `POST /api/users/:id/names` - Update user names
+- `POST /api/users/:id/password` - Change password
+- `GET /api/users/:id/matches` - Get user's match history
+
+### Game Routes
+- `POST /api/users/games` - Save game
+- `GET /api/users/:id/matches` - Get match history
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a new Pull Request

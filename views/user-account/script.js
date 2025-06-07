@@ -251,7 +251,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				.then(response => {
 					if (!response.ok) {
 						return response.json().then(data => {
-							throw new Error(data.error || 'Грешка при обновяване на контактната информация');
+							throw new Error(data.error || 'Error updating contact information');
 						});
 					}
 					return response.json();
@@ -397,7 +397,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					.then(response => {
 						if (!response.ok) {
 							return response.json().then(data => {
-								throw new Error(data.error || 'Грешка при обновяване на имената');
+								throw new Error(data.error || 'Error updating names');
 							});
 						}
 						return response.json();
@@ -460,7 +460,7 @@ document.addEventListener("DOMContentLoaded", function () {
 					.then(response => {
 						if (!response.ok) {
 							return response.json().then(data => {
-								throw new Error(data.error || 'Грешка при промяната на паролата');
+								throw new Error(data.error || 'Error updating password');
 							});
 						}
 						return response.json();

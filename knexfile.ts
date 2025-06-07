@@ -1,17 +1,18 @@
 import { knexSnakeCaseMappers } from 'objection'
+import { config } from './server/src/config.js'
 
-export const config = {
+export const knexConfig = {
   development: {
     client: 'postgres',
     connection: {
-      host: 'localhost',
-      port: 5432,
-      user: 'plh',
-      password: '123456',
-      database: 'chess'
+      host: config.get('database.host'),
+      port: config.get('database.port'),
+      user: config.get('database.username'),
+      password: config.get('database.password'),
+      database: config.get('database.name')
     },
     ...knexSnakeCaseMappers()
   }
 }
 
-export default config
+export default knexConfig

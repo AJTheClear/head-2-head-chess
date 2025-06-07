@@ -219,7 +219,7 @@ function updateBoard(gameState) {
       const piece = gameState.board[pos];
       if (piece) {
         const img = document.createElement("img");
-        img.src = `/img/${piece}.png`;
+        img.src = `../assets/pieces/${piece}.png`;
         img.draggable = false;
         img.dataset.pos = pos;
         square.appendChild(img);

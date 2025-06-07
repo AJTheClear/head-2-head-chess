@@ -4,13 +4,12 @@ import bcrypt from 'bcrypt';
 
 const router = express.Router();
 
-// POST /api/users - регистрира нов потребител
+// POST /api/users - registering new user
 router.post('/', async (req, res) => {
     console.log('Received registration request:', req.body);
     try {
         const { firstName, lastName, email, username, country, password } = req.body;
 
-        // Проверка дали потребителят вече съществува
         const existingUser = await db('users')
             .where({ email })
             .orWhere({ username })
@@ -20,15 +19,15 @@ router.post('/', async (req, res) => {
             console.log('User already exists:', existingUser);
             return res.status(400).json({
                 errors: {
-                    general: 'Потребител с този имейл или потребителско име вече съществува'
+                    general: 'User with that email already exists'
                 }
             });
         }
 
-        // Хеширане на паролата
+        // hashing the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Създаване на нов потребител
+        // creating new user
         const [user] = await db('users')
             .insert({
                 first_name: firstName,
@@ -42,29 +41,29 @@ router.post('/', async (req, res) => {
             .returning('*');
 
         console.log('User created successfully:', user);
-        res.status(201).json({ message: 'Успешна регистрация' });
+        res.status(201).json({ message: 'Successful registration' });
     } catch (error) {
         console.error('Error registering user:', error);
         res.status(500).json({
             errors: {
-                general: 'Възникна грешка при регистрацията'
+                general: 'Error registering'
             }
         });
     }
 });
 
-// GET /api/users - взима всички потребители
+// GET /api/users - returns all users
 router.get('/', async (req, res) => {
     try {
         const users = await db('users').select('id', 'username', 'email', 'elo');
         res.json(users);
     } catch (error) {
         console.error('Error fetching users:', error);
-        res.status(500).json({ error: 'Възникна грешка при зареждането на потребителите' });
+        res.status(500).json({ error: 'Error loading user' });
     }
 });
 
-// GET /api/users/:id - взима конкретен потребител
+// GET /api/users/:id - returns a specific user
 router.get('/:id', async (req, res) => {
     try {
         const user = await db('users')
@@ -73,13 +72,13 @@ router.get('/:id', async (req, res) => {
             .first();
         
         if (!user) {
-            return res.status(404).json({ error: 'Потребителят не е намерен' });
+            return res.status(404).json({ error: 'User not found' });
         }
         
         res.json(user);
     } catch (error) {
         console.error('Error fetching user:', error);
-        res.status(500).json({ error: 'Възникна грешка при зареждането на потребителя' });
+        res.status(500).json({ error: 'Error loading user' });
     }
 });
 
@@ -87,7 +86,7 @@ router.post('/login', async (req, res) => {
 	try {
 		const { username, password } = req.body;
 
-		// Проверяваме дали потребителят съществува
+		// check if user exists
 		const user = await db('users')
 			.where('username', username)
 			.orWhere('email', username)
@@ -97,21 +96,21 @@ router.post('/login', async (req, res) => {
             console.log(user)
 			return res.status(401).json({
 				success: false,
-				error: "Потребителят не съществува"
+				error: "User does not exist"
 			});
 		}
 
-		// Проверяваме паролата
+		// check password
 		const isPasswordValid = await bcrypt.compare(password, user.password);
 		if (!isPasswordValid) {
 			console.log('Invalid password for user:', user.username);
 			return res.status(401).json({
 				success: false,
-				error: "Грешна парола"
+				error: "Wrong password"
 			});
 		}
 
-		// Не изпращаме паролата обратно към клиента
+		// Don't sent the user back their password
 		const { password: _, ...userWithoutPassword } = user;
         console.log(user)
 
@@ -123,7 +122,7 @@ router.post('/login', async (req, res) => {
 		console.error('Login error:', error);
 		res.status(500).json({
 			success: false,
-			error: "Възникна грешка при влизането"
+			error: "Error logging in"
 		});
 	}
 });
@@ -142,7 +141,7 @@ router.post('/games', async (req, res) => {
             moves
         } = req.body;
 
-        // Записваме играта
+        // saving game
         const game = await db('games').insert({
             game_id: gameId,
             player_id_white: whitePlayerId,
@@ -162,7 +161,7 @@ router.post('/games', async (req, res) => {
         console.error('Save game error:', error);
         res.status(500).json({
             success: false,
-            error: "Възникна грешка при записване на играта"
+            error: "Error saving game"
         });
     }
 });
@@ -177,7 +176,7 @@ router.post('/:id', async (req, res) => {
         const { username, bio, country } = req.body;
         console.log('Updating user:', { id, username, bio, country });
         
-        // Проверяваме дали потребителят съществува
+        // check if user exists
         const user = await db('users').where('id', id).first();
         console.log('Found user:', user);
         
@@ -185,11 +184,11 @@ router.post('/:id', async (req, res) => {
             console.log('User not found');
             return res.status(404).json({
                 success: false,
-                error: "Потребителят не е намерен"
+                error: "User not found"
             });
         }
         console.log('user was found')
-        // Проверяваме дали новото потребителско име вече не се използва
+        // Checking if new username is free
         if (username && username !== user.username) {
             const existingUser = await db('users')
                 .where('username', username)
@@ -199,12 +198,12 @@ router.post('/:id', async (req, res) => {
             if (existingUser) {
                 return res.status(400).json({
                     success: false,
-                    error: "Това потребителско име вече се използва"
+                    error: "This username is already in use"
                 });
             }
         }
         console.log('no other user with that name')
-        // Обновяваме потребителя
+        // update user
         const updatedUser = await db('users')
             .where('id', id)
             .update({
@@ -223,7 +222,7 @@ router.post('/:id', async (req, res) => {
         console.error('Update user error:', error);
         res.status(500).json({
             success: false,
-            error: "Възникна грешка при обновяване на профила"
+            error: "Error updating profile"
         });
     }
 });
@@ -238,7 +237,7 @@ router.post('/:id/contact', async (req, res) => {
         const { email, phoneNumber } = req.body;
         console.log('Updating user contact:', { id, email, phoneNumber });
         
-        // Проверяваме дали потребителят съществува
+        // check if user exists
         const user = await db('users').where('id', id).first();
         console.log('Found user:', user);
         
@@ -246,11 +245,11 @@ router.post('/:id/contact', async (req, res) => {
             console.log('User not found');
             return res.status(404).json({
                 success: false,
-                error: "Потребителят не е намерен"
+                error: "User not found"
             });
         }
 
-        // Проверяваме дали новият имейл вече не се използва
+        // Check if the new email is already in use
         if (email && email !== user.email) {
             const existingUser = await db('users')
                 .where('email', email)
@@ -260,12 +259,12 @@ router.post('/:id/contact', async (req, res) => {
             if (existingUser) {
                 return res.status(400).json({
                     success: false,
-                    error: "Този имейл вече се използва"
+                    error: "This email is already in use"
                 });
             }
         }
 
-        // Обновяваме потребителя
+        // Update user
         const updatedUser = await db('users')
             .where('id', id)
             .update({
@@ -283,7 +282,7 @@ router.post('/:id/contact', async (req, res) => {
         console.error('Update user contact error:', error);
         res.status(500).json({
             success: false,
-            error: "Възникна грешка при обновяване на контактната информация"
+            error: "Error updating contact information"
         });
     }
 });
@@ -298,7 +297,7 @@ router.post('/:id/names', async (req, res) => {
         const { firstName, middleName, lastName } = req.body;
         console.log('Updating user names:', { id, firstName, middleName, lastName });
         
-        // Проверяваме дали потребителят съществува
+        // Check if user exists
         const user = await db('users').where('id', id).first();
         console.log('Found user:', user);
         
@@ -306,11 +305,11 @@ router.post('/:id/names', async (req, res) => {
             console.log('User not found');
             return res.status(404).json({
                 success: false,
-                error: "Потребителят не е намерен"
+                error: "User not found"
             });
         }
 
-        // Обновяваме потребителя
+        // Update user
         const updatedUser = await db('users')
             .where('id', id)
             .update({
@@ -329,7 +328,7 @@ router.post('/:id/names', async (req, res) => {
         console.error('Update user names error:', error);
         res.status(500).json({
             success: false,
-            error: "Възникна грешка при обновяване на имената"
+            error: "Error updating names"
         });
     }
 });
@@ -341,28 +340,28 @@ router.post('/:id/password', async (req, res) => {
         const { id } = req.params;
         const { oldPassword, newPassword } = req.body;
         
-        // Проверяваме дали потребителят съществува
+        // Check if user exists
         const user = await db('users').where('id', id).first();
         if (!user) {
             return res.status(404).json({
                 success: false,
-                error: "Потребителят не е намерен"
+                error: "User not found"
             });
         }
 
-        // Проверяваме старата парола
+        // Check old password
         const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
         if (!isPasswordValid) {
             return res.status(401).json({
                 success: false,
-                error: "Грешна текуща парола"
+                error: "Incorrect current password"
             });
         }
 
-        // Хешираме новата парола
+        // Hash new password
         const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-        // Обновяваме паролата и датата на последна промяна
+        // Update password and last changed date
         const updatedUser = await db('users')
             .where('id', id)
             .update({
@@ -379,7 +378,7 @@ router.post('/:id/password', async (req, res) => {
         console.error('Update password error:', error);
         res.status(500).json({
             success: false,
-            error: "Възникна грешка при промяната на паролата"
+            error: "Error changing password"
         });
     }
 });
@@ -436,9 +435,9 @@ router.get('/:id/matches', async (req, res) => {
         console.error('Get matches error:', error);
         res.status(500).json({
             success: false,
-            error: "Възникна грешка при зареждане на историята на мачовете"
+            error: "Error loading match history"
         });
     }
 });
 
-export default router; 
+export default router;
