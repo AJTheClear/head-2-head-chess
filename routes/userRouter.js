@@ -384,4 +384,61 @@ router.post('/:id/password', async (req, res) => {
     }
 });
 
+router.get('/:id/matches', async (req, res) => {
+    console.log('GET /api/users/:id/matches - Received request');
+    try {
+        const userId = req.params.id;
+        
+        // Get all games where user was either white or black
+        const matches = await db('games')
+            .select(
+                'games.*',
+                db.raw('white.username as white_username'),
+                db.raw('black.username as black_username')
+            )
+            .leftJoin('users as white', 'games.player_id_white', 'white.id')
+            .leftJoin('users as black', 'games.player_id_black', 'black.id')
+            .where('player_id_white', userId)
+            .orWhere('player_id_black', userId)
+            .orderBy('date_time_played', 'desc')
+            .limit(3);
+
+        console.log('Matches found:', matches); // Debug log
+
+        // Format matches for frontend
+        const formattedMatches = matches.map(match => {
+            const isWhite = match.playerIdWhite == userId;
+            const opponent = isWhite ? match.blackUsername : match.whiteUsername;
+            let result;
+            if (match.state === 'w' || match.state === 'b') {
+                result = (match.state === 'w' && isWhite) || 
+                        (match.state === 'b' && !isWhite) ? 'win' : 'loss';
+            } else {
+                result = 'draw';
+            }
+
+            return {
+                result,
+                opponent: `vs. ${opponent}`,
+                date: new Date(match.dateTimePlayed).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                })
+            };
+        });
+
+        res.json({
+            success: true,
+            matches: formattedMatches
+        });
+    } catch (error) {
+        console.error('Get matches error:', error);
+        res.status(500).json({
+            success: false,
+            error: "Възникна грешка при зареждане на историята на мачовете"
+        });
+    }
+});
+
 export default router; 

@@ -28,7 +28,42 @@ document.addEventListener("DOMContentLoaded", async () => {
 	// Initialize form validations
 	initializeFormValidation();
 
-	
+	// Get user ID from sessionStorage
+	const currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+	const userId = currentUser ? currentUser.id : null;
+
+	// Load match history
+	function loadMatchHistory() {
+		if (!userId) {
+			console.error('No user ID found in sessionStorage');
+			return;
+		}
+
+		fetch(`/api/users/${userId}/matches`)
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					const matchHistory = document.querySelector('.match-history');
+					matchHistory.innerHTML = ''; // Clear existing matches
+
+					data.matches.forEach(match => {
+						const matchItem = document.createElement('div');
+						matchItem.className = 'match-item';
+						matchItem.innerHTML = `
+							<div class="match-result ${match.result}">${match.result.charAt(0).toUpperCase() + match.result.slice(1)}</div>
+							<div class="match-opponent">${match.opponent}</div>
+							<div class="match-date">${match.date}</div>
+						`;
+						matchHistory.appendChild(matchItem);
+					});
+				}
+			})
+			.catch(error => {
+				console.error('Error loading match history:', error);
+			});
+	}
+
+	loadMatchHistory();
 });
 
 if (typeof window.authService === "undefined") {
