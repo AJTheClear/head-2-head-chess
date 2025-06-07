@@ -1,5 +1,5 @@
 import { knexSnakeCaseMappers } from 'objection'
-import { config } from './server/src/config.js'
+import { config } from './db/src/config.js'
 
 export const knexConfig = {
   development: {

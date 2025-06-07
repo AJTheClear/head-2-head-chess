@@ -39,24 +39,32 @@ The server will start on port 3001.
 
 ```
 head-2-head-chess/
-├── index.js              # Main server file
-├── knexfile.ts           # Database configuration
-├── tsconfig.json         # TypeScript configuration
-├── assets/               # Static assets
-│   ├── audio/            # Sound effects
-│   ├── images/           # General images
-│   └── pieces/           # Chess piece images
-├── components/           # Reusable components
-│   └── navbar/           # Navigation bar component
-├── migrations/           # Database migrations
-├── routes/               # Express routes
-├── server/               # Server-side code
-├── styles/               # CSS styles
-├── utils/                # Utility functions
-│   └── game.js           # Game logic
-└── views/                # Frontend views
-    ├── home-page/        # Home page
-    └── game-page/        # Game page
+├── index.js                     # Express server entry point
+├── knexfile.ts                  # Knex.js database configuration and migrations
+├── tsconfig.json                # TypeScript compiler configuration
+├── assets/                      # Static assets and media files
+│   ├── audio/                   # Game sound effects and notifications
+│   ├── images/                  # UI images and icons
+│   └── pieces/                  # Chess piece SVG and PNG assets
+├── components/                  # Reusable UI components
+│   └── navbar/                  # Global navigation component
+├── migrations/                  # Database schema migrations
+├── routes/                      # Express route handlers and controllers
+├── db/                          # Database models and queries
+├── styles/                      # Global CSS and theme variables
+├── utils/                       # Shared utility functions
+│   ├── auth.js                  # Authentication and user management
+│   ├── game.js                  # Chess game logic and rules
+│   ├── load-navbar.js           # Dynamic navbar loader
+│   ├── country-phone-codes.json # Country calling codes data
+│   └── iso-countries.json       # ISO country codes and names
+└── views/                       # Frontend page templates
+    ├── home-page/               # Landing page with game features
+    ├── game-page/               # Main chess game interface
+    ├── login-page/              # User authentication page
+    ├── register-page/           # New user registration form
+    ├── user-account/            # User profile and settings
+    └── user-public-profile/     # Public user profile view
 ```
 
 ## Features
